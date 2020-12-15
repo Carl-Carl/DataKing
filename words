@@ -1,0 +1,22 @@
+按照1->4的顺序，将语句存入Request对象中
+1. main words
+    create
+    select + from + (where) + (orderby)
+    update + set + (where)
+    insert into + values
+    delete + from + where
+    drop
+
+2. file level
+    update
+    from
+
+3. consult level
+    set
+    values
+    where
+
+4. present level
+    order by
+
+main -> from(file) -> where -> 
