@@ -8,7 +8,6 @@
     drop
 
 2. file level
-    update
     from
 
 3. consult level
@@ -20,3 +19,5 @@
     order by
 
 main -> from(file) -> where -> 
+
+create class age=int, score = double, name = string

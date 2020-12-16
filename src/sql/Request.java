@@ -13,11 +13,11 @@ public class Request {
     private final Type type;
     private final String[] from;
     private final String[] set;
-    private final String[] where;
+    private final String where;
     private final String[] values;
     private final String[] order;
 
-    public Request(Type type, String[] from, String[] set, String[] where, String[] values, String[] order) {
+    public Request(Type type, String[] from, String[] set, String where, String[] values, String[] order) {
         this.type  = type;
         this.from = from;
         this.set = set;
@@ -43,7 +43,7 @@ public class Request {
         return this.from;
     }
 
-    public String[] getWhere() {
+    public String getWhere() {
         return this.where;
     }
 
