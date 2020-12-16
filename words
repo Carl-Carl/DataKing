@@ -5,7 +5,7 @@
     update "from" set "set" + (where "where")
     insert into "from" ("set") values "values"
     delete from "from" (where "where")
-    drop
+    drop "from"
 
 2. file level
     from
