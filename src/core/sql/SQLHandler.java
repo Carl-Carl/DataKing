@@ -1,13 +1,16 @@
 /*
  * @Author: your name
  * @Date: 2020-12-14 14:38:41
- * @LastEditTime: 2020-12-15 23:44:41
+ * @LastEditTime: 2020-12-17 21:24:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\SQLHandler.java
  */
 package core.sql;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import sql.Parser;
 import sql.Request;
 
 /**
@@ -18,19 +21,24 @@ public class SQLHandler {
     private SQLHandler() {
     }
 
-    public static void Handle(Request request) {
-        Query query = switch (request.getType()) {
-            case SELECT -> select;
-            case CREATE -> create;
-            case UPDATE -> update;
-            case INSERT -> insert;
-            case DELETE -> delete;
-            case DROP   -> drop;
-            default -> null;
-        };
+    public static void Handle(String sql, Pack[] packs) {
+        Request[] request = Parser.parse(sql);
 
-        if (request != null)
-            query.query(request);
+        for (Request i : request) {
+            Query query = switch (i.getType()) {
+                case SELECT -> select;
+                case CREATE -> create;
+                case UPDATE -> update;
+                case INSERT -> insert;
+                case DELETE -> delete;
+                case DROP   -> drop;
+                default -> null;
+            };
+
+            if (i != null)
+                query.query(i);
+        }
+        
     }
 
     private static final Query select = new Query() {

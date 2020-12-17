@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-16 14:00:09
- * @LastEditTime: 2020-12-17 09:26:28
+ * @LastEditTime: 2020-12-17 20:31:27
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\sql\pack.java
@@ -80,7 +80,7 @@ public class Pack  {
 
     public int getInt(Data row, String columns) {
         Head temp = head.get(columns);
-        return (Integer)temp.getKind().cast(row.content[temp.getId()]);
+        return (Integer)(row.content[temp.getId()]);
     }
 
     public String getString(Data row, String columns) {
