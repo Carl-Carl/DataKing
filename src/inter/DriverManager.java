@@ -1,19 +1,14 @@
 /*
  * @Author: your name
  * @Date: 2020-12-11 17:09:53
- * @LastEditTime: 2020-12-16 21:37:27
+ * @LastEditTime: 2020-12-17 13:55:52
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\DriverManager.java
  */
 package inter;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.HashMap;
 
 import com.google.gson.Gson;
@@ -43,18 +38,15 @@ public class DriverManager {
         }
     }
 
-    public static Connection getConnection(String URL, String user, String password) {
-        Connection con = new Connection();
-        
+    public static Connection getConnection(String URL) {
+        try {
+            Connection con = new Connection(URL);
+            return con;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        return con;
-    }
-
-    public static void newUser(String name, String password) throws Exception {
-        if (list.get(name) != null)
-            list.put(name, password);
-        else
-            throw new Exception("User has existed.");
+        return null;
     }
 
     public static void main(String[] args) {

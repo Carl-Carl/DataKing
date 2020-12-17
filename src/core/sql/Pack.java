@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-16 14:00:09
- * @LastEditTime: 2020-12-16 19:43:15
+ * @LastEditTime: 2020-12-17 09:26:28
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\sql\pack.java
@@ -9,6 +9,7 @@
 package core.sql;
 
 import java.util.*;
+import java.sql.Statement;
 
 public class Pack  {
     
@@ -18,12 +19,12 @@ public class Pack  {
     /**
      * The head of the table.
      */
-    final Head[] head;
+    final HashMap<String, Head> head;
 
     /**
      * Elements of the table
      */
-    ArrayList<Object[]> elements;
+    HashSet<Data> elements;
 
     /**
      * The number of columns of the table
@@ -40,20 +41,20 @@ public class Pack  {
      * Head
      */
     private class Head {
-        
-        private String name;
-        private Kind kind;
 
-        public Object getName() {
-            return this.name;
-        }
+        private Class<?> kind;
+        private int id;
 
-        public Kind getKind() {
+        public Class<?> getKind() {
             return this.kind;
         }
+
+        public int getId() {
+            return this.id;
+        }
         
-		public Head(String name, Kind kind) {
-			this.name = name;
+		public Head(int id, Class<?> kind) {
+			this.id = id;
 			this.kind = kind;
 		}
     }
@@ -65,17 +66,7 @@ public class Pack  {
      * @param columns Kind of each column
      */
     public Pack(String[] names, Kind[] columns) throws Exception {
-        head = new Head[columns.length];
-        length = columns.length;
-        elements = new ArrayList<Object[]>();
-
-        if (names.length != columns.length) {
-            throw new Exception("The size of names and columns are different.");
-        }
-
-        for (int i = 0; i < columns.length; i++) {
-            head[i] = new Head(names[i], columns[i]);
-        }
+        
     }
 
     /**
@@ -85,6 +76,21 @@ public class Pack  {
      */
     public int getWidth() {
         return length;
+    }
+
+    public int getInt(Data row, String columns) {
+        Head temp = head.get(columns);
+        return (Integer)temp.getKind().cast(row.content[temp.getId()]);
+    }
+
+    public String getString(Data row, String columns) {
+        Head temp = head.get(columns);
+        return (String)temp.getKind().cast(row.content[temp.getId()]);
+    }
+
+    public double getReal(Data row, String columns) {
+        Head temp = head.get(columns);
+        return (Double)temp.getKind().cast(row.content[temp.getId()]);
     }
 
     public static void main(String[] args) {
@@ -102,6 +108,8 @@ public class Pack  {
         } catch (Exception e) {
             System.out.println(e);
         }
+
+        
     }
 }
 
