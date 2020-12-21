@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-16 14:00:09
- * @LastEditTime: 2020-12-21 19:16:41
+ * @LastEditTime: 2020-12-21 20:49:46
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\sql\pack.java
@@ -17,6 +17,11 @@ public class Pack  {
     private static final long serialVersionUID = 1L;
     
     /**
+     * 
+     */
+    private String table;
+
+    /**
      * The head of the table.
      */
     private final HashMap<String, Head> head  = new HashMap<String, Head>();
@@ -24,7 +29,7 @@ public class Pack  {
     /**
      * Elements of the table
      */
-    private HashMap<Object, Object[]> elements;
+    private HashMap<Data, Object[]> elements = new HashMap<Data, Object[]>();
 
     /**
      * The number of columns of the table
@@ -59,10 +64,11 @@ public class Pack  {
      * @param names name of each column
      * @param columns Kind of each column
      */
-    public Pack(String[] names, Class<?>[] columns) throws Exception {
+    public Pack(String table, String[] names, Class<?>[] columns) throws Exception {
         if (names.length != columns.length || names.length == 0)
             throw new Exception("The length of two arrays are incompatible.");
         
+        this.table = table;
         length = columns.length;
         for (int i = 0; i < length; i++) {
             head.put(names[i], new Head(i, columns[i]));
@@ -88,8 +94,18 @@ public class Pack  {
         return head.get(key).getId();
     }
 
+    public boolean add(Object[] newElement) {
+        if (newElement.length != length)
+            return false;
+        
+        elements.put(new Data(newElement), newElement);
+        return true;
+    }
+
     public Object[] getItem(Object keyValue) {
-        return elements.get(keyValue);
+        var temp = new Object[length];
+        temp[0] = keyValue;
+        return elements.get(new Data(temp));
     }
 
     public Class<?> getKind(Object columnName) {
@@ -118,18 +134,39 @@ public class Pack  {
 
         Object obj = 15;
         System.out.println(obj.getClass());
-        for (var i : a) {
-            System.out.println(i.cast(obj));
-            System.out.println(i);
+        if (obj.getClass().cast(obj) == Integer.class) {
+            Integer in = Integer.class.cast(obj);
         }
+        
 
         try {
-            new Pack(new String[]{"1", "2", "3"}, a);
+            Pack pk = new Pack("123", new String[]{"1", "2", "3"}, a);
+            pk.add(new Object[]{1, 2.0, 3});
+            pk.add(new Object[]{4, 5.0, 6});
+            pk.add(new Object[]{4, 7.0, 6});
+            var c = pk.getAll();
+            var it = c.iterator();
+            var temp = it.next();
+            it.remove();
+            c.forEach((Object[] objs) -> {System.out.println(objs[0].hashCode());});
+            temp[0] = 10;
+            pk.add(temp);
+            var f = pk.getItem(10);
+            c.forEach((Object[] objs) -> {System.out.println(objs[0]);});
+            System.out.println(f[0]);
         } catch (Exception e) {
             System.out.println(e);
         }
 
         
+    }
+
+    public String getTable() {
+        return table;
+    }
+
+    public void setTable(String table) {
+        this.table = table;
     }
 }
 
