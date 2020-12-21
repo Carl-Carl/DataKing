@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-14 14:38:41
- * @LastEditTime: 2020-12-17 21:24:39
+ * @LastEditTime: 2020-12-18 10:58:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\SQLHandler.java
@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import sql.Parser;
 import sql.Request;
+import core.*;
 
 /**
  * The universal class to handle queries to the database
