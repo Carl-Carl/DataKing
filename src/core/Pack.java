@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-16 14:00:09
- * @LastEditTime: 2020-12-21 20:49:46
+ * @LastEditTime: 2020-12-22 12:15:58
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\sql\pack.java
@@ -17,7 +17,7 @@ public class Pack  {
     private static final long serialVersionUID = 1L;
     
     /**
-     * 
+     * The name of table
      */
     private String table;
 
@@ -35,28 +35,7 @@ public class Pack  {
      * The number of columns of the table
      */
     private final int length;
-
-    /**
-     * Head
-     */
-    private class Head {
-
-        private final Class<?> kind;
-        private final int id;
-
-        public Class<?> getKind() {
-            return this.kind;
-        }
-
-        public int getId() {
-            return this.id;
-        }
-        
-		public Head(int id, Class<?> kind) {
-			this.id = id;
-			this.kind = kind;
-		}
-    }
+    
 
     /**
      * The constructor initialize the names and types of columns
@@ -123,7 +102,12 @@ public class Pack  {
         if (hd == null || obj == null)
             return null;
         
-        return obj[hd.id];
+        return obj[hd.getId()];
+    }
+
+    public Head[] getHeads() {
+        var temp = head.values();
+        return temp.toArray(new Head[0]);
     }
 
     public static void main(String[] args) {
