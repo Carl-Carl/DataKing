@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-16 14:00:09
- * @LastEditTime: 2020-12-22 12:15:58
+ * @LastEditTime: 2020-12-22 12:29:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\sql\pack.java
@@ -50,7 +50,7 @@ public class Pack  {
         this.table = table;
         length = columns.length;
         for (int i = 0; i < length; i++) {
-            head.put(names[i], new Head(i, columns[i]));
+            head.put(names[i], new Head(i, columns[i], names[i]));
         }
     }
 
@@ -106,8 +106,10 @@ public class Pack  {
     }
 
     public Head[] getHeads() {
-        var temp = head.values();
-        return temp.toArray(new Head[0]);
+        var temp = head.values().toArray(new Head[0]);
+        Arrays.sort(temp, (Object a, Object b)->
+            { return ((Head)a).getId() < ((Head)b).getId() ? 1 : 0;});
+        return temp;
     }
 
     public static void main(String[] args) {
@@ -137,11 +139,11 @@ public class Pack  {
             pk.add(temp);
             var f = pk.getItem(10);
             c.forEach((Object[] objs) -> {System.out.println(objs[0]);});
+            var x = pk.getHeads();
             System.out.println(f[0]);
         } catch (Exception e) {
             System.out.println(e);
         }
-
         
     }
 
