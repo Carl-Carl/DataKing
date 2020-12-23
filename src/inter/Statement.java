@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-11 17:10:11
- * @LastEditTime: 2020-12-23 19:55:34
+ * @LastEditTime: 2020-12-23 20:50:48
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Statement.java
@@ -10,6 +10,7 @@ package inter;
 
 import core.Pack;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import sql.Parser;
 import sql.Request;
@@ -19,9 +20,44 @@ import core.sql.*;
 public class Statement {
 
     private boolean active = true;
-    private Connection connection;
+    private final Connection connection;
     String root;
-    Pack[] packs;
+    ArrayList<Pack> packs;
+
+    Statement (Connection connection, String root, Collection<Pack> packs) {
+        this.connection = connection;
+        this.root = root;
+        this.packs = new ArrayList<Pack>(packs);
+        for (Pack pack : packs) {
+            this.packs.add(pack);
+        }
+    }
+
+    /**
+     * Execute sql sentences which query the database
+     * 
+     * @param sql
+     * @return The result
+     */
+    public ResultSet executeQuery(String sql) {
+        if (!active)
+            return null;
+        ResultSet res = new ResultSet();
+        return res;
+    }
+
+    /**
+     * Execute sql sentences which modify the database
+     * @param sql
+     * @return If you change the database successfully, the function
+     * will return true, otherwise it will return false.
+     */
+    public boolean executeUpdate(String sql) {
+        if (!active)
+            return false;
+        
+        return true;
+    }
 
     class SQLHandler {
 

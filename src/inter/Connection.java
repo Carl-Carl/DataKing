@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-15 12:26:17
- * @LastEditTime: 2020-12-23 18:57:01
+ * @LastEditTime: 2020-12-23 20:57:41
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Connection.java
@@ -9,14 +9,17 @@
 package inter;
 
 import java.io.*;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import core.Pack;
 
 public class Connection {
     
     private String root;
-
-    private String[] packs; 
+    private boolean active = true;
+    ArrayList<String> temps = new ArrayList<String>();
 
     /**
      * Locate a directory as the root of database
@@ -43,13 +46,63 @@ public class Connection {
         }
     }
 
+    /**
+     * Get the statement of database.
+     * @return The statement.
+     */
+    public Statement getStatement() {
+        List<Pack> packs = new ArrayList<Pack>();
+        for (var temp : temps) {
+            File tempFile = new File(root + "/" + temp + ".temp");
+            if (tempFile.exists()) {
+                packs.add(e);
+            }
+        }
+        
+        Statement statement = new Statement(this, root.substring(9), packs);
+        return statement;
+    }
+
     public String getRoot() {
         return root;
+    }
+
+    /**
+     * Commit all the changes to the database
+     */
+    public void commit() {
+        for (String str : temps) {
+            File tempFile = new File(root + "/" + str + ".temp");
+            File originFile = new File(root + "/" + str + ".dk");
+            if (tempFile.exists() && tempFile.exists()) {
+                originFile.delete();
+                tempFile.renameTo(originFile);
+            }
+        }
+    }
+
+    /**
+     * Close the connection and clear temporary files.
+     */
+    public void close() {
+        active = false;
+        for (String str : temps) {
+            File f = new File(root + "/" + str + ".temp");
+            if (f.exists())
+                f.delete();
+        }
+        this.temps = null;
     }
 
     public static void main(String[] args) {
         var con = DriverManager.getConnection("dataking:URL.db");
         var str = con.getRoot();
-        
+        con.temps.add("a");
+        con.commit();
+        con.close();
+    }
+
+    public boolean isActive() {
+        return active;
     }
 }
