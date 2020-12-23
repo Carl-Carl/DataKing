@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-11 17:10:11
- * @LastEditTime: 2020-12-23 19:27:10
+ * @LastEditTime: 2020-12-23 19:55:34
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Statement.java
@@ -18,6 +18,8 @@ import core.sql.*;
 
 public class Statement {
 
+    private boolean active = true;
+    private Connection connection;
     String root;
     Pack[] packs;
 
@@ -26,8 +28,7 @@ public class Statement {
         private SQLHandler() {
         }
     
-        public void Handle(String sql) {
-            Request[] request = Parser.parse(sql);
+        public void Handle(Request[] request) {
     
             for (Request i : request) {
                 Query query = switch (i.getType()) {
@@ -185,5 +186,13 @@ public class Statement {
             }
         };
     
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public String getRoot() {
+        return root;
     }
 }
