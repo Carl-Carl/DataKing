@@ -1,21 +1,42 @@
 package inter;
 import com.google.gson.Gson;
+import core.Head;
 import core.Pack;
-import core.sql.*;
 
 import java.io.*;
-import java.util.Collection;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 public class CreateFile {
+
+    public CreateFile() {
+    }
 
     public static String createJsonString(Pack pack){
 
         StringBuilder s = new StringBuilder();
         Gson gson = new Gson();
-
+        String str = gson.toJson(pack);
+        System.out.println(str);
+        var h = pack.getHeads();
+        ArrayList<String> names_ = new ArrayList<String>();
+        ArrayList<String> columns_ = new ArrayList<String>();
+        for (Head head : h) {
+            names_.add(head.getName());
+            if (Integer.class.equals(head.getKind())) {
+                columns_.add("Int");
+            } else if (Double.class.equals(head.getKind())) {
+                columns_.add("Dbl");
+            } else
+                columns_.add("Str");
+        }
+        s.append(gson.toJson(names_));
+        s.append(gson.toJson(columns_));
         var a = pack.getAll();
         for (Object[] objects : a) {
-            s.append(gson.toJson(objects));
+            String item;
+            item = gson.toJson(objects);
+            s.append(item);
         }
         return s.toString();
     }
@@ -35,7 +56,7 @@ public class CreateFile {
             }
 
             file.createNewFile();
-            Writer King = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+            Writer King = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
             King.write(jsonString);
             King.flush();
             King.close();
@@ -52,14 +73,13 @@ public class CreateFile {
 
         String table = "Student";
         String[] name = {"name", "score", "age"};
-        Class<?>[] columns = {String.class, Integer.class, Integer.class};
+        Class<?>[] columns = {Integer.class, String.class, Integer.class};
         Pack pack = new Pack(table, name, columns);
         pack.add(new Object[]{"a", 10, 9});
         pack.add(new Object[]{"b", 100, 89});
-        System.out.println(pack.toString());
-        String s = createJsonString(pack);
-        System.out.println(s);
 
+        var a = createJsonString(pack);
+        System.out.println(a);
     }
 
 }

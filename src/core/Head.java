@@ -8,7 +8,7 @@
  */
 package core;
 
-class Head {
+public class Head {
 
     private final Class<?> kind;
     private final int id;
