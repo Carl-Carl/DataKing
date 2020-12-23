@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-15 12:26:17
- * @LastEditTime: 2020-12-17 14:03:58
+ * @LastEditTime: 2020-12-23 18:57:01
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Connection.java
@@ -15,6 +15,8 @@ import java.util.regex.Pattern;
 public class Connection {
     
     private String root;
+
+    private String[] packs; 
 
     /**
      * Locate a directory as the root of database

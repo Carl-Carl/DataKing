@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-16 14:00:09
- * @LastEditTime: 2020-12-22 12:29:50
+ * @LastEditTime: 2020-12-23 18:43:06
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\sql\pack.java
@@ -20,6 +20,11 @@ public class Pack  {
      * The name of table
      */
     private String table;
+
+    /**
+     * The name of data base
+     */
+    private String rootName;
 
     /**
      * The head of the table.
@@ -43,7 +48,7 @@ public class Pack  {
      * @param names name of each column
      * @param columns Kind of each column
      */
-    public Pack(String table, String[] names, Class<?>[] columns) throws Exception {
+    public Pack(String root, String table, String[] names, Class<?>[] columns) throws Exception {
         if (names.length != columns.length || names.length == 0)
             throw new Exception("The length of two arrays are incompatible.");
         
@@ -153,6 +158,10 @@ public class Pack  {
 
     public void setTable(String table) {
         this.table = table;
+    }
+
+    public String getRootName() {
+        return rootName;
     }
 }
 
