@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2020-12-22 12:30:16
+ * @LastEditTime: 2020-12-23 19:11:01
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \DataKing\src\inter\CreateFile.java
+ */
 package inter;
 import com.google.gson.Gson;
 import core.Head;
@@ -16,8 +24,8 @@ public class CreateFile {
 
         StringBuilder s = new StringBuilder();
         Gson gson = new Gson();
-        String str = gson.toJson(pack);
-        System.out.println(str);
+        // String str = gson.toJson(pack);
+        //System.out.println(str);
         var h = pack.getHeads();
         ArrayList<String> names_ = new ArrayList<String>();
         ArrayList<String> columns_ = new ArrayList<String>();
@@ -74,7 +82,7 @@ public class CreateFile {
         String table = "Student";
         String[] name = {"name", "score", "age"};
         Class<?>[] columns = {Integer.class, String.class, Integer.class};
-        Pack pack = new Pack(table, name, columns);
+        Pack pack = new Pack("1", table, name, columns);
         pack.add(new Object[]{"a", 10, 9});
         pack.add(new Object[]{"b", 100, 89});
 

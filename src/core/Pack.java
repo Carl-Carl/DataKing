@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-16 14:00:09
- * @LastEditTime: 2020-12-23 18:43:06
+ * @LastEditTime: 2020-12-23 19:17:15
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\sql\pack.java
@@ -9,6 +9,10 @@
 package core;
 
 import java.util.*;
+
+import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
+
 import java.sql.Statement;
 
 public class Pack  {
@@ -19,26 +23,31 @@ public class Pack  {
     /**
      * The name of table
      */
+    @Expose
     private String table;
 
     /**
      * The name of data base
      */
+    @Expose
     private String rootName;
 
     /**
      * The head of the table.
      */
+    @Expose
     private final HashMap<String, Head> head  = new HashMap<String, Head>();
 
     /**
      * Elements of the table
      */
+    @Expose
     private HashMap<Data, Object[]> elements = new HashMap<Data, Object[]>();
 
     /**
      * The number of columns of the table
      */
+    @Expose
     private final int length;
     
 
@@ -113,7 +122,7 @@ public class Pack  {
     public Head[] getHeads() {
         var temp = head.values().toArray(new Head[0]);
         Arrays.sort(temp, (Object a, Object b)->
-            { return ((Head)a).getId() < ((Head)b).getId() ? 1 : 0;});
+            { return ((Head)a).getId() < ((Head)b).getId() ? -1 : 1;});
         return temp;
     }
 
@@ -131,21 +140,14 @@ public class Pack  {
         
 
         try {
-            Pack pk = new Pack("123", new String[]{"1", "2", "3"}, a);
+            Pack pk = new Pack("rt", "123", new String[]{"1", "2", "3"}, a);
             pk.add(new Object[]{1, 2.0, 3});
             pk.add(new Object[]{4, 5.0, 6});
             pk.add(new Object[]{4, 7.0, 6});
-            var c = pk.getAll();
-            var it = c.iterator();
-            var temp = it.next();
-            it.remove();
-            c.forEach((Object[] objs) -> {System.out.println(objs[0].hashCode());});
-            temp[0] = 10;
-            pk.add(temp);
-            var f = pk.getItem(10);
-            c.forEach((Object[] objs) -> {System.out.println(objs[0]);});
-            var x = pk.getHeads();
-            System.out.println(f[0]);
+            
+            Gson gs = new Gson();
+            String str = gs.toJson(pk, Pack.class);
+            System.out.println(str);
         } catch (Exception e) {
             System.out.println(e);
         }
