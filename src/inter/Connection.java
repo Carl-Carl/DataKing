@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-15 12:26:17
- * @LastEditTime: 2020-12-23 18:57:01
+ * @LastEditTime: 2020-12-23 20:01:30
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Connection.java
@@ -41,6 +41,11 @@ public class Connection {
             // Create a new one
             rootPath.mkdir();
         }
+    }
+
+    public Statement getStatement() {
+        Statement statement = new Statement();
+        return statement;
     }
 
     public String getRoot() {
