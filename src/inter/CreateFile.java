@@ -38,13 +38,13 @@ public class CreateFile {
             } else
                 columns_.add("Str");
         }
-        s.append(gson.toJson(names_));
-        s.append(gson.toJson(columns_));
+        s.append(gson.toJson(names_)).append("\n");
+        s.append(gson.toJson(columns_)).append("\n");
         var a = pack.getAll();
         for (Object[] objects : a) {
             String item;
             item = gson.toJson(objects);
-            s.append(item);
+            s.append(item).append("\n");
         }
         return s.toString();
     }
@@ -52,7 +52,7 @@ public class CreateFile {
     public static boolean createJsonFile(String jsonString, String filePath, String filename){
         boolean file_created = true;
 
-        String fullPath = filePath + File.separator + filename + ".json";
+        String fullPath = filePath + File.separator + filename + ".temp";
 
         try {
             File file = new File(fullPath);
@@ -87,6 +87,7 @@ public class CreateFile {
         pack.add(new Object[]{"b", 100, 89});
 
         var a = createJsonString(pack);
+        createJsonFile(a, "Dataking/Class4", table);
         System.out.println(a);
     }
 
