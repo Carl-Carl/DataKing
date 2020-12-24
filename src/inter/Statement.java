@@ -9,8 +9,13 @@
 package inter;
 
 import core.Pack;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 import sql.Parser;
 import sql.Request;
@@ -19,10 +24,11 @@ import core.sql.*;
 
 public class Statement {
 
-    private boolean active = true;
+    private final boolean active = true;
     private final Connection connection;
     String root;
     ArrayList<Pack> packs;
+    public ResultSet resultSet;
 
     Statement (Connection connection, String root, Collection<Pack> packs) {
         this.connection = connection;
@@ -39,11 +45,17 @@ public class Statement {
      * @param sql
      * @return The result
      */
-    public ResultSet executeQuery(String sql) {
+    public boolean executeQuery(String sql) throws FileNotFoundException {
         if (!active)
-            return null;
-        ResultSet res = new ResultSet();
-        return res;
+            return false;
+        Request[] requests = Parser.parse(sql);
+        SQLHandler handler = new SQLHandler();
+        assert requests != null;
+        for (Request request : requests) {
+            if(request.getType().equals(Request.Type.SELECT)) handler.Handle(request);
+            else System.out.println("Can't resolve \"" + sql +"\" in this query!\n");
+        }
+        return true;
     }
 
     /**
@@ -52,11 +64,44 @@ public class Statement {
      * @return If you change the database successfully, the function
      * will return true, otherwise it will return false.
      */
-    public boolean executeUpdate(String sql) {
+    public boolean executeUpdate(String sql) throws FileNotFoundException {
         if (!active)
             return false;
-        
+        Request[] requests = Parser.parse(sql);
+        SQLHandler handler = new SQLHandler();
+        assert requests != null;
+        for (Request request : requests) {
+            if(request.getType().equals(Request.Type.DELETE)) handler.Handle(request);
+            else if(request.getType().equals(Request.Type.INSERT)) handler.Handle(request);
+            else if(request.getType().equals(Request.Type.DROP)) handler.Handle(request);
+            else if(request.getType().equals(Request.Type.UPDATE)) handler.Handle(request);
+            else if(request.getType().equals(Request.Type.CREATE)) handler.Handle(request);
+            else System.out.println("Can't resolve \"" + sql +"\" in this query!\n");
+        }
         return true;
+    }
+
+    private Pack getPack(String table) throws FileNotFoundException {
+        for (Pack pack : packs) {
+            if(table.equals(pack.getTable())){
+                return pack;
+            }
+        }
+        File file = new File(root);
+        String[] file_list = file.list();
+        assert file_list != null;
+        for (String s : file_list) {
+            if(table.equals(s)){
+                FileSwitch fileSwitch = new FileSwitch();
+                return fileSwitch.ToPack(root, s);
+            }
+        }
+        for (Pack pack : packs) {
+            if (table.equals(pack.getTable())){
+                return pack;
+            }
+        }
+        return null;
     }
 
     class SQLHandler {
@@ -64,61 +109,78 @@ public class Statement {
         private SQLHandler() {
         }
     
-        public void Handle(Request[] request) {
-    
-            for (Request i : request) {
-                Query query = switch (i.getType()) {
+        public void Handle(Request request) throws FileNotFoundException {
+                Query query = switch (request.getType()) {
                     case SELECT -> select;
                     case CREATE -> create;
                     case UPDATE -> update;
                     case INSERT -> insert;
                     case DELETE -> delete;
                     case DROP   -> drop;
-                    default -> null;
                 };
-    
-                if (i != null)
-                    query.query(i);
-            }
-            
+                query.query(request);
         }
     
         private final Query select = new Query() {
             @Override
             public void query(Request request) {
-    
+                String[] table = request.getFrom();
+                Pack pack = null;
+                try {
+                    pack = getPack(table[0]);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                String[] names = request.getSet();
+                int size = names.length;
+                ArrayList<Class<?>> col = new ArrayList<Class<?>>();
+                ArrayList<Integer> chosen = new ArrayList<Integer>();
+                assert pack != null;
+                var a = pack.getHeads();
+                for (int i = 0; i < a.length; i++){
+                    if(names[i].equals(a[i].getName())){
+                        col.add(a[i].getKind());
+                        chosen.add(a[i].getId());
+                    }
+                }
+                try {
+                    resultSet = new ResultSet(root, table[0], names, (Class<?>[])col.toArray(new Class<?>[size]));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                var items = pack.getAll();
+                ArrayList<Object> temp = new ArrayList<Object>();
+                for (Object[] item : items) {
+                    for (Integer integer : chosen) {
+                        temp.add(item[integer]);
+                    }
+                    Object[] element = (Object[])temp.toArray(new Object[size]);
+                    resultSet.add(element);
+                    temp.clear();
+                }
             }
         };
     
         private final Query create = new Query() {
             @Override
             public void query(Request request) {
-    
-                Statement sta = new Statement();
+
                 String[] table = request.getFrom();
-                for (Pack pack : sta.packs) {
-                    if (table[0].equals(pack.getTable())){
-                        /*
-                        * create table重复的异常
-                        * */
-                        System.out.println(table[0]+"already exists!\n");
-                        return;
+                for (Pack pack : packs) {
+                    if(table[0].equals(pack.getTable())){
+                        System.out.println("Table already created!");
                     }
                 }
-    
                 String[] temp = request.getSet();
                 ArrayList<String> name_ = new ArrayList<String>();
                 ArrayList<Class<?>> columns_ = new ArrayList<Class<?>>();
                 for (String s : temp){
                     String[] split = s.split("=");
                     if (split.length != 2){
-                        /*
-                        * set 输入异常
-                        * */
                         System.out.println("Wrong SQL expression!\n");
                         return;
                     }
-                    name_.add(split[0].toString());
+                    name_.add(split[0]);
                     if (split[1].equals("String")){
                         columns_.add(String.class);
                     }if (split[1].equals("Integer")){
@@ -126,73 +188,45 @@ public class Statement {
                     }if (split[1].equals("Double")){
                         columns_.add(Double.class);
                     }
+                    else System.out.println("Unknown type!\n");
                 }
     
                 int size_of_name = name_.size();
                 int size_of_columns = columns_.size();
-                String[] name = (String[]) name_.toArray(new String[size_of_name]);
-                Class<?>[] columns = (Class<?>[]) columns_.toArray(new Class<?>[size_of_columns]);
-                int i;
-                for (i = 0; i < 10; i++) {
-                    if(sta.packs[i] == null){
-                        try {
-                            sta.packs[i] = new Pack(root, table[0], name, columns);
-                            break;
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
+                String[] name = name_.toArray(new String[size_of_name]);
+                Class<?>[] columns = columns_.toArray(new Class<?>[size_of_columns]);
+                Pack pack = null;
+                try {
+                    pack = new Pack(root, table[0], name, columns);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+                packs.add(pack);
             }
         };
     
         private final Query update = new Query() {
             @Override
             public void query(Request request) {
-    
+
             }
         };
     
         private final Query insert = new Query() {
             @Override
             public void query(Request request) {
-    
-                Statement sta = new Statement();
+
                 String[] table = request.getFrom();
-                for (Pack pack : sta.packs) {
-                    if (table[0].equals(pack.getTable())){
-                        if (request.getSet() == null){
-                            /*
-                            * 此处没有检查主关键字值是否相同
-                            * */
-                            pack.add(request.getValues());
-                        }
-                        else {
-                            String[] name = request.getSet();
-                            ArrayList<Object> item_new = new ArrayList<Object>();
-                            /*
-                            * 表头列表进行对应
-                            * */
-    
-                            int size = item_new.size();
-                            Object[] item = (Object[])item_new.toArray(new Object[size]);
-                            pack.add(item);
-                            /*
-                            * 此处不检查主关键字是否相同
-                            * 加入后提示成功
-                            * */
-                            System.out.println("Insert item succeed!\n");
-                        }
-                        return;
-                    }
+                try {
+                    Pack pack = getPack(table[0]);
+                    assert pack != null;
+                    pack.add(request.getValues());
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
                 }
-                /*
-                * 无用以插入新值的table
-                * */
-                System.out.println("No table exist!\n");
+
             }
         };
-    
         private final Query delete = new Query() {
             @Override
             public void query(Request request) {
@@ -203,27 +237,15 @@ public class Statement {
         private final Query drop = new Query() {
             @Override
             public void query(Request request) {
-                Statement sta = new Statement();
+
                 String[] table = request.getFrom();
-                for (int i = 0; i < sta.packs.length; i++) {
-                    if(table[0].equals(sta.packs[i].getTable())){
-                        sta.packs[i] = null;
-                        /*
-                        * 删除原有的pack
-                        * */
-                        System.out.println(table[0]+"drop success!\n");
-                        break;
-                    }
+                File file = new File(root + File.separator + table[0] + ".db");
+                if (file.exists()) {
+                    file.delete();
                 }
-                /*
-                * 没有要删除的表
-                * */
-                System.out.println(table[0]+"doesn't exist!\n");
             }
         };
-    
     }
-
     public boolean isActive() {
         return active;
     }
@@ -231,4 +253,5 @@ public class Statement {
     public String getRoot() {
         return root;
     }
+
 }

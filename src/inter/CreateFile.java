@@ -49,7 +49,10 @@ public class CreateFile {
         return s.toString();
     }
 
-    public static boolean createJsonFile(String jsonString, String filePath, String filename){
+    public static boolean createJsonFile(Pack pack, String filePath){
+
+        String jsonString = createJsonString(pack);
+        String filename = pack.getTable();
         boolean file_created = true;
 
         String fullPath = filePath + File.separator + filename + ".temp";
@@ -81,14 +84,12 @@ public class CreateFile {
 
         String table = "Student";
         String[] name = {"name", "score", "age"};
-        Class<?>[] columns = {Integer.class, String.class, Integer.class};
+        Class<?>[] columns = {String.class, Integer.class, Integer.class};
         Pack pack = new Pack("1", table, name, columns);
         pack.add(new Object[]{"a", 10, 9});
         pack.add(new Object[]{"b", 100, 89});
 
-        var a = createJsonString(pack);
-        createJsonFile(a, "Dataking/Class4", table);
-        System.out.println(a);
+        createJsonFile(pack, "Dataking/Class4");
     }
 
 }

@@ -10,10 +10,12 @@ package core.sql;
 
 import sql.Request;
 
+import java.io.FileNotFoundException;
+
 /**
  * An universal interface for query
  */
 @FunctionalInterface
 public interface Query {
-    public void query(Request request);
+    public void query(Request request) throws FileNotFoundException;
 }

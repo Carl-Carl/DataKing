@@ -11,6 +11,17 @@ package core.sql;
 
 import core.Pack;
 
-public class ResultSet {
-    Pack pack;
+public class ResultSet extends Pack{
+
+    /**
+     * The constructor initialize the names and types of columns
+     *
+     * @param root
+     * @param table
+     * @param names   name of each column
+     * @param columns Kind of each column
+     */
+    public ResultSet(String root, String table, String[] names, Class<?>[] columns) throws Exception {
+        super(root, table, names, columns);
+    }
 }
