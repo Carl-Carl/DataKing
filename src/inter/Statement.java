@@ -21,6 +21,7 @@ import sql.Parser;
 import sql.Request;
 import core.*;
 import core.sql.*;
+import inter.CreateFile;
 
 public class Statement {
 
@@ -107,19 +108,19 @@ public class Statement {
 
         private SQLHandler() {
         }
-    
+
         public void Handle(Request request) throws FileNotFoundException {
-                Query query = switch (request.getType()) {
-                    case SELECT -> select;
-                    case CREATE -> create;
-                    case UPDATE -> update;
-                    case INSERT -> insert;
-                    case DELETE -> delete;
-                    case DROP   -> drop;
-                };
-                query.query(request);
+            Query query = switch (request.getType()) {
+                case SELECT -> select;
+                case CREATE -> create;
+                case UPDATE -> update;
+                case INSERT -> insert;
+                case DELETE -> delete;
+                case DROP -> drop;
+            };
+            query.query(request);
         }
-    
+
         private final Query select = new Query() {
             @Override
             public void query(Request request) {
@@ -136,14 +137,14 @@ public class Statement {
                 ArrayList<Integer> chosen = new ArrayList<Integer>();
                 assert pack != null;
                 var a = pack.getHeads();
-                for (int i = 0; i < a.length; i++){
-                    if(names[i].equals(a[i].getName())){
+                for (int i = 0; i < a.length; i++) {
+                    if (names[i].equals(a[i].getName())) {
                         col.add(a[i].getKind());
                         chosen.add(a[i].getId());
                     }
                 }
                 try {
-                    resultSet = new ResultSet(root, table[0], names, (Class<?>[])col.toArray(new Class<?>[size]));
+                    resultSet = new ResultSet(root, table[0], names, (Class<?>[]) col.toArray(new Class<?>[size]));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -153,43 +154,44 @@ public class Statement {
                     for (Integer integer : chosen) {
                         temp.add(item[integer]);
                     }
-                    Object[] element = (Object[])temp.toArray(new Object[size]);
+                    Object[] element = (Object[]) temp.toArray(new Object[size]);
                     resultSet.add(element);
                     temp.clear();
                 }
             }
         };
-    
+
         private final Query create = new Query() {
             @Override
             public void query(Request request) {
 
                 String[] table = request.getFrom();
                 for (Pack pack : packs) {
-                    if(table[0].equals(pack.getTable())){
+                    if (table[0].equals(pack.getTable())) {
                         System.out.println("Table already created!");
                     }
                 }
                 String[] temp = request.getSet();
                 ArrayList<String> name_ = new ArrayList<String>();
                 ArrayList<Class<?>> columns_ = new ArrayList<Class<?>>();
-                for (String s : temp){
+                for (String s : temp) {
                     String[] split = s.split("=");
-                    if (split.length != 2){
+                    if (split.length != 2) {
                         System.out.println("Wrong SQL expression!\n");
                         return;
                     }
                     name_.add(split[0]);
-                    if (split[1].equals("String")){
+                    if (split[1].equals("String")) {
                         columns_.add(String.class);
-                    }if (split[1].equals("Integer")){
-                        columns_.add(Integer.class);
-                    }if (split[1].equals("Double")){
-                        columns_.add(Double.class);
                     }
-                    else System.out.println("Unknown type!\n");
+                    if (split[1].equals("Integer")) {
+                        columns_.add(Integer.class);
+                    }
+                    if (split[1].equals("Double")) {
+                        columns_.add(Double.class);
+                    } else System.out.println("Unknown type!\n");
                 }
-    
+
                 int size_of_name = name_.size();
                 int size_of_columns = columns_.size();
                 String[] name = name_.toArray(new String[size_of_name]);
@@ -203,7 +205,7 @@ public class Statement {
                 packs.add(pack);
             }
         };
-    
+
         private final Query update = new Query() {
             @Override
             public void query(Request request) {
@@ -219,7 +221,7 @@ public class Statement {
                 }
             }
         };
-    
+
         private final Query insert = new Query() {
             @Override
             public void query(Request request) {
@@ -241,7 +243,7 @@ public class Statement {
 
             }
         };
-    
+
         private final Query drop = new Query() {
             @Override
             public void query(Request request) {
@@ -253,12 +255,19 @@ public class Statement {
                 }
             }
         };
-<<<<<<< HEAD
     };
-=======
+
+    public void close(){
+        ArrayList<String> temp = new ArrayList<String>();
+        for (Pack pack : packs) {
+            CreateFile.createJsonFile(pack, root);
+            temp.add(pack.getTable());
+        }
+        int size = temp.size();
+        String[] list = (String[])temp.toArray(new String[size]);
+        active = false;
+        connection.addTemp(list);
     }
-    
->>>>>>> 3acac7d88196976fc77b24f611e19f6584dded7c
     public boolean isActive() {
         return active;
     }
