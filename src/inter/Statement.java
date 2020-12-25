@@ -41,7 +41,7 @@ public class Statement implements AutoCloseable {
 
     /**
      * Execute sql sentences which query the database
-     * 
+     *
      * @param sql
      * @return The result
      */
@@ -91,8 +91,9 @@ public class Statement implements AutoCloseable {
         String[] file_list = file.list();
         assert file_list != null;
         for (String s : file_list) {
-            if(table.equals(s.substring(0, s.length()-3))){
-                return FileSwitch.ToPack(root, s.substring(0, s.length()-3));
+            String substring = s.substring(0, s.length() - 3);
+            if(table.equals(substring)){
+                return FileSwitch.ToPack(root, substring);
             }
         }
         for (Pack pack : packs) {
@@ -127,7 +128,7 @@ public class Statement implements AutoCloseable {
         }
         else if(order.contains("<")) {
 
-            String[] orders = order.split("<");
+            String[] orders = order.split("\\s*<\\s*");
             if(orders.length > 2) return null;
 
             for (Head head : heads) {
@@ -142,7 +143,7 @@ public class Statement implements AutoCloseable {
         }
         else if(order.contains(">")) {
 
-            String[] orders = order.split(">");
+            String[] orders = order.split("\\s*>\\s*");
             if(orders.length > 2) return null;
 
             for (Head head : heads) {
@@ -190,7 +191,7 @@ public class Statement implements AutoCloseable {
 
         private SQLHandler() {
         }
-    
+
         public void Handle(Request request) {
                 Query query = switch (request.getType()) {
                     case SELECT -> select;
@@ -206,7 +207,7 @@ public class Statement implements AutoCloseable {
                 e.printStackTrace();
             }
         }
-    
+
         private final Query select = new Query() {
             @Override
             public void query(Request request) {
@@ -259,7 +260,7 @@ public class Statement implements AutoCloseable {
                 }
             }
         };
-    
+
         private final Query create = new Query() {
             @Override
             public void query(Request request) {
@@ -295,10 +296,10 @@ public class Statement implements AutoCloseable {
                     } else if (split[1].equalsIgnoreCase("Double")){
                         columns_.add(Double.class);
                     }
-                    else 
+                    else
                         System.out.println("Unknown type!\n");
                 }
-    
+
                 int size_of_name = name_.size();
                 int size_of_columns = columns_.size();
                 String[] name = name_.toArray(new String[size_of_name]);
@@ -312,7 +313,7 @@ public class Statement implements AutoCloseable {
                 packs.add(pack);
             }
         };
-    
+
         private final Query update = new Query() {
             @Override
             public void query(Request request) {
@@ -331,26 +332,29 @@ public class Statement implements AutoCloseable {
                 for (Object[] item : items) {
                     if(satisfy_where(key_value, item, class_type)) {
                         for (String s : set) {
-<<<<<<< HEAD
                             String s_ = s.trim();
                             Object[] data_new = check_where(s_, heads);
                             if(data_new != null && (int)data_new[2] == 0) {
-                                item[(int)data_new[0]] = (String)data_new[1];
-=======
-                            Object[] data_new = check_where(s, heads);
-                            if(data_new != null && (int)data_new[2] == 0) {
-                                var class_t = heads[(int)data_new[0]].getKind();
-                                item[(int)data_new[0]] = class_t.cast(data_new[1]);  
-                                
->>>>>>> 5136452f2b30ef26a77ac0e686543a008e0f65c6
+                                var class_t = heads[(int) data_new[0]].getKind();
+                                if(class_t.equals(Integer.class)){
+                                    var x1 = Integer.class.cast(Integer.parseInt((String)data_new[1]));
+                                    item[(int)data_new[0]] = x1;
+                                }
+                                else if(class_t.equals(String.class)){
+                                    var x1 = String.class.cast(((String)data_new[1]));
+                                    item[(int)data_new[0]] = x1;
+                                }
+                                else if(class_t.equals(Double.class)){
+                                    var x1 = Double.class.cast(Double.parseDouble((String)data_new[1]));
+                                    item[(int)data_new[0]] = x1;
+                                }
                             }
                         }
                     }
                 }
-
             }
         };
-    
+
         private final Query insert = new Query() {
             @Override
             public void query(Request request) {
@@ -390,7 +394,7 @@ public class Statement implements AutoCloseable {
                 items.removeIf(objects -> satisfy_where(key_value, objects, class_type));
             }
         };
-    
+
         private final Query drop = new Query() {
             @Override
             public void query(Request request) {
@@ -415,7 +419,7 @@ public class Statement implements AutoCloseable {
         connection.addTemp(list);
         active = false;
     }
-    
+
     public boolean isActive() {
         return active;
     }
