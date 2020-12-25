@@ -212,12 +212,15 @@ public class Statement implements AutoCloseable {
                 String[] table = request.getFrom();
                 Pack pack = null;
                 pack = getPack(table[0]);
+                if (pack == null) {
+                    System.out.println("No table found!");
+                    return;
+                }
                 String[] names = request.getSet();
                 int size = names.length;
                 ArrayList<Class<?>> col = new ArrayList<Class<?>>();
                 ArrayList<Integer> chosen = new ArrayList<Integer>();
                 ArrayList<String> names_ = new ArrayList<String>();
-                assert pack != null;
                 var a = pack.getHeads();
                 for (int i = 0; i < a.length; i++){
                     if(names[0].equals("*")){
@@ -237,7 +240,6 @@ public class Statement implements AutoCloseable {
                     var items = pack.getAll();
                     ArrayList<Object> temp = new ArrayList<Object>();
                     Object[] key_value = check_where(request.getWhere(), pack.getHeads());
-
                     var class_type = key_value == null ? null : a[(int)key_value[0]].getKind();
                     for (Object[] item : items) {
                         if(satisfy_where(key_value, item, class_type)){
@@ -264,12 +266,14 @@ public class Statement implements AutoCloseable {
                 for (Pack pack : packs) {
                     if(table[0].equals(pack.getTable())){
                         System.out.println("Table already created!");
+                        return;
                     }
                 }
 
-                File file = new File(root + File.separator + table[0] + ".db");
+                File file = new File(root + File.separator + table[0] + ".dk");
                 if(file.exists()){
                     System.out.println("Table already created! Please choose another name!");
+                    return;
                 }
 
                 String[] temp = request.getSet();
@@ -310,17 +314,29 @@ public class Statement implements AutoCloseable {
         private final Query update = new Query() {
             @Override
             public void query(Request request) {
+
                 String[] table = request.getFrom();
                 Pack pack = getPack(table[0]);
-                Collection<Object[]> items = null;
-                if (pack != null) {
-                    items = pack.getAll();
+                if (pack == null) {
+                    System.out.println("No table found!");
+                    return;
                 }
-                if (items != null) {
-                    for (Object[] item : items) {
-                        item = null;
+                Head[] heads = pack.getHeads();
+                String[] set = request.getSet();
+                var items = pack.getAll();
+                Object[] key_value = check_where(request.getWhere(), pack.getHeads());
+                var class_type = key_value == null ? null : heads[(int)key_value[0]].getKind();
+                for (Object[] item : items) {
+                    if(satisfy_where(item, key_value, class_type)) {
+                        for (String s : set) {
+                            Object[] data_new = check_where(s, heads);
+                            if(data_new != null && (int)data_new[2] == 1) {
+                                item[(int)data_new[0]] = (String)data_new[1];
+                            }
+                        }
                     }
                 }
+
             }
         };
     
@@ -347,7 +363,20 @@ public class Statement implements AutoCloseable {
         private final Query delete = new Query() {
             @Override
             public void query(Request request) {
-
+                String[] table = request.getFrom();
+                Pack pack = null;
+                pack = getPack(table[0]);
+                if (pack == null) {
+                    System.out.println("No table found!");
+                    return;
+                }
+                Collection<Object[]> items = null;
+                items = pack.getAll();
+                var a = pack.getHeads();
+                ArrayList<Object> temp = new ArrayList<Object>();
+                Object[] key_value = check_where(request.getWhere(), pack.getHeads());
+                var class_type = key_value == null ? null : a[(int)key_value[0]].getKind();
+                items.removeIf(objects -> satisfy_where(key_value, objects, class_type));
             }
         };
     
