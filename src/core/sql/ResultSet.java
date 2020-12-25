@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-18 10:46:45
- * @LastEditTime: 2020-12-25 16:07:32
+ * @LastEditTime: 2020-12-25 17:07:52
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\sql\ResultSet.java
@@ -45,14 +45,14 @@ public class ResultSet {
         Head head = heads.get(keyword);
         if (head == null || head.getKind() != Integer.class) 
             throw new Exception("Not a valid keyword.");
-        return  Integer.class.cast(current[head.getId()]);
+        return  Integer.class.cast(String.class.cast(current[head.getId()]));
     }
 
     public Double getDouble(String keyword) throws Exception {
         Head head = heads.get(keyword);
         if (head == null || head.getKind() != Double.class) 
             throw new Exception("Not a valid keyword.");
-        return  Double.class.cast(current[head.getId()]);
+        return  Double.class.cast(String.class.cast(current[head.getId()]));
     }
 
     public void print(){
