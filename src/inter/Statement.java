@@ -156,6 +156,34 @@ public class Statement implements AutoCloseable {
         return key_value;
     }
 
+    private boolean satisfy_where(Object[] key_value, Object[] item, Class<?> class_type){
+
+        if(key_value == null) return true;
+
+        if(class_type.equals(Integer.class)){
+            int num = (int)key_value[0];
+            var x1 = Integer.class.cast(Integer.parseInt((String)item[num]));
+            var x2 = Integer.class.cast(Integer.parseInt((String)key_value[1]));
+            if(x1.compareTo(x2) == (int)key_value[2]) return true;
+            else return false;
+        }
+        else if(class_type.equals(String.class)){
+            int num = (int)key_value[0];
+            var x1 = String.class.cast(item[num]);
+            var x2 = String.class.cast(key_value[1]);
+            if(x1.compareTo(x2) == (int)key_value[2]) return true;
+            else return false;
+        }
+        else if(class_type.equals(Double.class)){
+            int num = (int)key_value[0];
+            var x1 = Double.class.cast(Double.parseDouble((String)item[num]));
+            var x2 = Double.class.cast(Double.parseDouble((String)key_value[1]));
+            if(x1.compareTo(x2) == (int)key_value[2]) return true;
+            else return false;
+        }
+        return true;
+    }
+
     class SQLHandler {
 
         private SQLHandler() {
@@ -191,12 +219,15 @@ public class Statement implements AutoCloseable {
                 assert pack != null;
                 var a = pack.getHeads();
                 for (int i = 0; i < a.length; i++){
-                    if(names[i].equals(a[i].getName())){
+                    if(names[0].equals("*")){
+                        col.add(a[i].getKind());
+                        chosen.add(a[i].getId());
+                    }
+                    else if(names[i].equals(a[i].getName())){
                         col.add(a[i].getKind());
                         chosen.add(a[i].getId());
                     }
                 }
-
                 try {
                     Pack result = new Pack(root, table[0], names, (Class<?>[])col.toArray(new Class<?>[size]));
                     var items = pack.getAll();
@@ -205,42 +236,14 @@ public class Statement implements AutoCloseable {
                     Object[] key_value = check_where(request.getWhere(), pack.getHeads());
                     int num = (int)key_value[0];
                     var class_type = a[(int)key_value[0]].getKind();
-
                     for (Object[] item : items) {
-
-                        if(class_type.equals(Integer.class)){
-                            var x1 = Integer.class.cast(Integer.parseInt((String)item[num]));
-                            var x2 = Integer.class.cast(Integer.parseInt((String)key_value[1]));
-                            if(x1.compareTo(x2) == (Integer)key_value[2]){
-                                for (Integer integer : chosen) {
-                                    temp.add(item[integer]);
-                                }
-                                Object[] element = (Object[])temp.toArray(new Object[size]);
-                                result.add(element);
-                                temp.clear();
+                        if(satisfy_where(key_value, item, class_type)){
+                            for (Integer integer : chosen) {
+                                temp.add(item[integer]);
                             }
-                        }else if(class_type.equals(String.class)){
-                            var x1 = String.class.cast(item[num]);
-                            var x2 = String.class.cast(key_value[1]);
-                            if(x1.compareTo(x2) == (Integer)key_value[2]){
-                                for (Integer integer : chosen) {
-                                    temp.add(item[integer]);
-                                }
-                                Object[] element = (Object[])temp.toArray(new Object[size]);
-                                result.add(element);
-                                temp.clear();
-                            }
-                        }else if (class_type.equals(Double.class)){
-                            var x1 = Double.class.cast(item[num]);
-                            var x2 = Double.class.cast(key_value[1]);
-                            if(x1.compareTo(x2) == (Integer)key_value[2]){
-                                for (Integer integer : chosen) {
-                                    temp.add(item[integer]);
-                                }
-                                Object[] element = (Object[])temp.toArray(new Object[size]);
-                                result.add(element);
-                                temp.clear();
-                            }
+                            Object[] element = (Object[])temp.toArray(new Object[size]);
+                            result.add(element);
+                            temp.clear();
                         }
                     }
                     resultSet = new ResultSet(result);
@@ -324,8 +327,17 @@ public class Statement implements AutoCloseable {
 
                 String[] table = request.getFrom();
                 Pack pack = getPack(table[0]);
-                pack.add(request.getValues());
-
+                if (pack == null) {
+                    System.out.println("No table found!");
+                    return;
+                }
+                String[] values = request.getValues();
+                Head[] heads = pack.getHeads();
+                if (values.length != heads.length) {
+                    System.out.println("Wrong insert data!");
+                    return;
+                }
+                pack.add(values);
             }
         };
 
