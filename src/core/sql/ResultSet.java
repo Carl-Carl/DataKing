@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-18 10:46:45
- * @LastEditTime: 2020-12-18 10:48:06
+ * @LastEditTime: 2020-12-25 14:34:30
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\sql\ResultSet.java
@@ -30,15 +30,15 @@ public class ResultSet extends Pack{
         System.out.println("**********"+this.getTable()+"**********");
         var a = this.getHeads();
         for (Head head : a) {
-            System.out.println(head.getName()+"\t");
+            System.out.print(head.getName()+"\t");
         }
-        System.out.println("\n");
+        System.out.println("");
         var items = this.getAll();
         for (Object[] item : items) {
             for (int i = 0; i <item.length; i++) {
-                System.out.println(item[i] + "\t|");
+                System.out.print(item[i] + "\t|");
             }
-            System.out.println("\n");
+            System.out.println("");
         }
     }
 }
