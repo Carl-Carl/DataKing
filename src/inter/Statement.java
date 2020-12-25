@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-11 17:10:11
- * @LastEditTime: 2020-12-25 16:46:51
+ * @LastEditTime: 2020-12-25 17:28:06
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Statement.java
@@ -228,6 +228,7 @@ public class Statement implements AutoCloseable {
                         chosen.add(a[i].getId());
                     }
                 }
+                
                 try {
                     Pack result = new Pack(root, table[0], names, (Class<?>[])col.toArray(new Class<?>[size]));
                     var items = pack.getAll();
