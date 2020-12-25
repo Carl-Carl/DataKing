@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-11 17:10:11
- * @LastEditTime: 2020-12-25 13:41:11
+ * @LastEditTime: 2020-12-25 13:54:49
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Statement.java
@@ -253,12 +253,8 @@ public class Statement {
                 }
             }
         };
-<<<<<<< HEAD
     };
-=======
-    }
     
->>>>>>> 3acac7d88196976fc77b24f611e19f6584dded7c
     public boolean isActive() {
         return active;
     }

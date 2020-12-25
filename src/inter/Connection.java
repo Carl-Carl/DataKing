@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-15 12:26:17
- * @LastEditTime: 2020-12-25 13:52:01
+ * @LastEditTime: 2020-12-25 13:57:08
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Connection.java
@@ -86,7 +86,8 @@ public class Connection {
     }
 
     void addTemp(String[] tables) {
-        temps.addAll(Arrays.asList(tables));
+        for (String str : tables)
+            temps.add(str);
     }
 
     /**
