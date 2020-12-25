@@ -8,6 +8,7 @@
  */
 package inter;
 
+import core.Head;
 import core.Pack;
 
 import java.io.File;
@@ -100,9 +101,59 @@ public class Statement {
         return null;
     }
 
-    private boolean check_where(String where){
+    private Object[] check_where(String where, Head[] heads){
 
-        return true;
+        if(where == null){
+            return null;
+        }
+        String order = where.trim();
+        Object[] key_value = new Object[3];
+        if(order.contains("=")) {
+
+            String[] orders = order.split("=");
+            if(orders.length > 2) return null;
+
+            for (Head head : heads) {
+                if(head.getName().equals(orders[0])){
+                    key_value[0] = head.getId();
+                    break;
+                }
+            }
+            if(key_value[0] == null) return null;
+            key_value[1] = orders[1];
+            key_value[2] = 0;
+        }
+        else if(order.contains("<")) {
+
+            String[] orders = order.split("<");
+            if(orders.length > 2) return null;
+
+            for (Head head : heads) {
+                if(head.getName().equals(orders[0])){
+                    key_value[0] = head.getId();
+                    break;
+                }
+            }
+            if(key_value[0] == null) return null;
+            key_value[1] = orders[1];
+            key_value[2] = -1;
+        }
+        else if(order.contains(">")) {
+
+            String[] orders = order.split(">");
+            if(orders.length > 2) return null;
+
+            for (Head head : heads) {
+                if(head.getName().equals(orders[0])){
+                    key_value[0] = head.getId();
+                    break;
+                }
+            }
+            if(key_value[0] == null) return null;
+            key_value[1] = orders[1];
+            key_value[2] = 1;
+        }
+        return key_value;
     }
 
     class SQLHandler {
@@ -137,7 +188,6 @@ public class Statement {
                 int size = names.length;
                 ArrayList<Class<?>> col = new ArrayList<Class<?>>();
                 ArrayList<Integer> chosen = new ArrayList<Integer>();
-
                 assert pack != null;
                 var a = pack.getHeads();
                 for (int i = 0; i < a.length; i++){
@@ -148,20 +198,54 @@ public class Statement {
                 }
 
                 try {
-                    resultSet = new ResultSet(root, table[0], names, (Class<?>[])col.toArray(new Class<?>[size]));
+                    Pack result = new Pack(root, table[0], names, (Class<?>[])col.toArray(new Class<?>[size]));
+                    var items = pack.getAll();
+                    ArrayList<Object> temp = new ArrayList<Object>();
+
+                    Object[] key_value = check_where(request.getWhere(), pack.getHeads());
+                    int num = (int)key_value[0];
+                    var class_type = a[(int)key_value[0]].getKind();
+
+                    for (Object[] item : items) {
+
+                        if(class_type.equals(Integer.class)){
+                            var x1 = Integer.class.cast(item[num]);
+                            var x2 = Integer.class.cast(key_value[1]);
+                            if(x1.compareTo(x2) == (Integer)key_value[2]){
+                                for (Integer integer : chosen) {
+                                    temp.add(item[integer]);
+                                }
+                                Object[] element = (Object[])temp.toArray(new Object[size]);
+                                result.add(element);
+                                temp.clear();
+                            }
+                        }else if(class_type.equals(String.class)){
+                            var x1 = String.class.cast(item[num]);
+                            var x2 = String.class.cast(key_value[1]);
+                            if(x1.compareTo(x2) == (Integer)key_value[2]){
+                                for (Integer integer : chosen) {
+                                    temp.add(item[integer]);
+                                }
+                                Object[] element = (Object[])temp.toArray(new Object[size]);
+                                result.add(element);
+                                temp.clear();
+                            }
+                        }else if (class_type.equals(Double.class)){
+                            var x1 = Double.class.cast(item[num]);
+                            var x2 = Double.class.cast(key_value[1]);
+                            if(x1.compareTo(x2) == (Integer)key_value[2]){
+                                for (Integer integer : chosen) {
+                                    temp.add(item[integer]);
+                                }
+                                Object[] element = (Object[])temp.toArray(new Object[size]);
+                                result.add(element);
+                                temp.clear();
+                            }
+                        }
+                    }
+                    resultSet = new ResultSet(result);
                 } catch (Exception e) {
                     e.printStackTrace();
-                }
-                
-                var items = pack.getAll();
-                ArrayList<Object> temp = new ArrayList<Object>();
-                for (Object[] item : items) {
-                    for (Integer integer : chosen) {
-                        temp.add(item[integer]);
-                    }
-                    Object[] element = (Object[])temp.toArray(new Object[size]);
-                    resultSet.add(element);
-                    temp.clear();
                 }
             }
         };
