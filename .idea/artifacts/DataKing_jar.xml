@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="DataKing:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/DataKing_jar</output-path>
+    <root id="root">
+      <element id="archive" name="DataKing.jar">
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+        </element>
+        <element id="module-output" name="DataKing" />
+      </element>
+      <element id="library" level="application" name="gson-2.8.6" />
+    </root>
+  </artifact>
+</component>

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-11 17:10:11
- * @LastEditTime: 2020-12-25 21:14:32
+ * @LastEditTime: 2020-12-25 21:48:33
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Statement.java
@@ -53,7 +53,7 @@ public class Statement implements AutoCloseable {
         SQLHandler handler = new SQLHandler();
         for (Request request : requests) {
             if(request.getType().equals(Request.Type.SELECT)) handler.Handle(request);
-            else System.out.println("Can't resolve \"" + sql +"\" in this query!\n");
+            // else System.out.println("Can't resolve \"" + sql +"\" in this query!\n");
         }
         return resultSet;
     }
@@ -76,7 +76,7 @@ public class Statement implements AutoCloseable {
             else if(request.getType().equals(Request.Type.DROP)) handler.Handle(request);
             else if(request.getType().equals(Request.Type.UPDATE)) handler.Handle(request);
             else if(request.getType().equals(Request.Type.CREATE)) handler.Handle(request);
-            else System.out.println("Can't resolve \"" + sql +"\" in this query!");
+            // else System.out.println("Can't resolve \"" + sql +"\" in this query!");
         }
         return true;
     }
@@ -279,7 +279,7 @@ public class Statement implements AutoCloseable {
                 ArrayList<String> name_ = new ArrayList<String>();
                 ArrayList<Class<?>> columns_ = new ArrayList<Class<?>>();
                 for (String s : temp){
-                    String[] split = s.split("=");
+                    String[] split = s.split("(\\s*)=(\\s*)");
                     if (split.length != 2){
                         System.out.println("Wrong SQL expression!\n");
                         return;
