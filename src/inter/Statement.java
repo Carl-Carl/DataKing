@@ -76,12 +76,12 @@ public class Statement {
             else if(request.getType().equals(Request.Type.DROP)) handler.Handle(request);
             else if(request.getType().equals(Request.Type.UPDATE)) handler.Handle(request);
             else if(request.getType().equals(Request.Type.CREATE)) handler.Handle(request);
-            else System.out.println("Can't resolve \"" + sql +"\" in this query!\n");
+            else System.out.println("Can't resolve \"" + sql +"\" in this query!");
         }
         return true;
     }
 
-    private Pack getPack(String table) throws FileNotFoundException {
+    private Pack getPack(String table)  {
         for (Pack pack : packs) {
             if(table.equals(pack.getTable())){
                 return pack;
@@ -125,11 +125,7 @@ public class Statement {
             public void query(Request request) {
                 String[] table = request.getFrom();
                 Pack pack = null;
-                try {
-                    pack = getPack(table[0]);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+                pack = getPack(table[0]);
                 String[] names = request.getSet();
                 int size = names.length;
                 ArrayList<Class<?>> col = new ArrayList<Class<?>>();
@@ -208,14 +204,10 @@ public class Statement {
             @Override
             public void query(Request request) {
                 String[] table = request.getFrom();
-                try {
-                    Pack pack = getPack(table[0]);
-                    var items = pack.getAll();
-                    for (Object[] item : items) {
-                        item = null;
-                    }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                Pack pack = getPack(table[0]);
+                var items = pack.getAll();
+                for (Object[] item : items) {
+                    item = null;
                 }
             }
         };
@@ -225,13 +217,9 @@ public class Statement {
             public void query(Request request) {
 
                 String[] table = request.getFrom();
-                try {
-                    Pack pack = getPack(table[0]);
-                    assert pack != null;
-                    pack.add(request.getValues());
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+                Pack pack = getPack(table[0]);
+                assert pack != null;
+                pack.add(request.getValues());
 
             }
         };

@@ -20,7 +20,7 @@ public class FileSwitch {
     public FileSwitch() {
     }
 
-    public static Pack ToPack(String root, String table) throws FileNotFoundException {
+    public static Pack ToPack(String root, String table) {
         Gson gson = new Gson();
         File file = new File(root + File.separator + table +".temp");
         try (BufferedReader reader = new BufferedReader(new FileReader(file))){
