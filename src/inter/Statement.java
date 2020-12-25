@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-11 17:10:11
- * @LastEditTime: 2020-12-25 14:26:34
+ * @LastEditTime: 2020-12-25 15:30:22
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Statement.java
@@ -19,7 +19,7 @@ import sql.Parser;
 import sql.Request;
 import core.sql.*;
 
-public class Statement {
+public class Statement implements AutoCloseable {
 
     private boolean active = true;
     private final Connection connection;

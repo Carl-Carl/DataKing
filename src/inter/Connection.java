@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 import core.Pack;
 
-public class Connection {
+public class Connection implements AutoCloseable {
     
     private String root;
     private boolean active = true;
@@ -110,7 +110,7 @@ public class Connection {
         st.executeUpdate("insert into a values (1, mike);");
         st.executeUpdate("insert into a values (2, hhh);");
         st.executeQuery("select num,name from a;");
-        st.resultSet.Print();
+        st.resultSet.print();
         st.close();
         con.commit();
         con.close();

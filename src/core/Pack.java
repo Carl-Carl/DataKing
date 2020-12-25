@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-16 14:00:09
- * @LastEditTime: 2020-12-23 19:17:15
+ * @LastEditTime: 2020-12-25 15:55:07
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\sql\pack.java
@@ -127,6 +127,7 @@ public class Pack  {
     }
 
     public static void main(String[] args) {
+        
         Class<?>[] a = new Class[3];
         a[0] = Integer.class;
         a[1] = Double.class;
@@ -164,6 +165,10 @@ public class Pack  {
 
     public String getRootName() {
         return rootName;
+    }
+
+    public HashMap<String, Head> getHead() {
+        return head;
     }
 }
 
