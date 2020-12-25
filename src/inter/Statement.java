@@ -103,12 +103,16 @@ public class Statement {
         return null;
     }
 
+    private boolean check_where(String where){
+     return true;
+    }
+
     class SQLHandler {
 
         private SQLHandler() {
         }
     
-        public void Handle(Request request) throws FileNotFoundException {
+        public void Handle(Request request) {
                 Query query = switch (request.getType()) {
                     case SELECT -> select;
                     case CREATE -> create;
@@ -117,12 +121,17 @@ public class Statement {
                     case DELETE -> delete;
                     case DROP   -> drop;
                 };
+            try {
                 query.query(request);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     
         private final Query select = new Query() {
             @Override
             public void query(Request request) {
+
                 String[] table = request.getFrom();
                 Pack pack = null;
                 pack = getPack(table[0]);
@@ -130,6 +139,7 @@ public class Statement {
                 int size = names.length;
                 ArrayList<Class<?>> col = new ArrayList<Class<?>>();
                 ArrayList<Integer> chosen = new ArrayList<Integer>();
+
                 assert pack != null;
                 var a = pack.getHeads();
                 for (int i = 0; i < a.length; i++){
@@ -168,6 +178,12 @@ public class Statement {
                         System.out.println("Table already created!");
                     }
                 }
+
+                File file = new File(root + File.separator + table[0] + ".db");
+                if(file.exists()){
+                    System.out.println("Table already created! Please choose another name!");
+                }
+
                 String[] temp = request.getSet();
                 ArrayList<String> name_ = new ArrayList<String>();
                 ArrayList<Class<?>> columns_ = new ArrayList<Class<?>>();
@@ -208,9 +224,14 @@ public class Statement {
             public void query(Request request) {
                 String[] table = request.getFrom();
                 Pack pack = getPack(table[0]);
-                var items = pack.getAll();
-                for (Object[] item : items) {
-                    item = null;
+                Collection<Object[]> items = null;
+                if (pack != null) {
+                    items = pack.getAll();
+                }
+                if (items != null) {
+                    for (Object[] item : items) {
+                        item = null;
+                    }
                 }
             }
         };
@@ -226,6 +247,7 @@ public class Statement {
 
             }
         };
+
         private final Query delete = new Query() {
             @Override
             public void query(Request request) {
