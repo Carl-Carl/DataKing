@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-11 17:10:11
- * @LastEditTime: 2020-12-23 20:50:48
+ * @LastEditTime: 2020-12-25 13:41:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Statement.java
@@ -24,7 +24,7 @@ import core.sql.*;
 
 public class Statement {
 
-    private final boolean active = true;
+    private boolean active = true;
     private final Connection connection;
     String root;
     ArrayList<Pack> packs;
@@ -92,8 +92,7 @@ public class Statement {
         assert file_list != null;
         for (String s : file_list) {
             if(table.equals(s)){
-                FileSwitch fileSwitch = new FileSwitch();
-                return fileSwitch.ToPack(root, s);
+                return FileSwitch.ToPack(root, s);
             }
         }
         for (Pack pack : packs) {
@@ -254,7 +253,12 @@ public class Statement {
                 }
             }
         };
+<<<<<<< HEAD
     };
+=======
+    }
+    
+>>>>>>> 3acac7d88196976fc77b24f611e19f6584dded7c
     public boolean isActive() {
         return active;
     }

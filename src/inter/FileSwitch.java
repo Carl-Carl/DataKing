@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2020-12-24 20:51:36
+ * @LastEditTime: 2020-12-25 13:38:49
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \DataKing\src\inter\FileSwitch.java
+ */
 package inter;
 
 import com.google.gson.Gson;
@@ -9,10 +17,10 @@ import java.util.ArrayList;
 
 public class FileSwitch {
 
-    public FileSwitch() {
+    private FileSwitch() {
     }
 
-    public Pack ToPack(String root, String table) throws FileNotFoundException {
+    public static Pack ToPack(String root, String table) throws FileNotFoundException {
         Gson gson = new Gson();
         File file = new File(root + File.separator + table +".temp");
         try (BufferedReader reader = new BufferedReader(new FileReader(file))){
