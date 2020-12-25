@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-15 12:26:17
- * @LastEditTime: 2020-12-25 20:10:54
+ * @LastEditTime: 2020-12-25 20:29:01
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Connection.java
@@ -107,9 +107,10 @@ public class Connection implements AutoCloseable {
         var con = DriverManager.getConnection("dataking:URL.db");
         var st = con.getStatement();
         st.executeUpdate("update a set name = kite where num=2 ;");
-        st.executeQuery("select * from a;");
+        st.executeQuery("select * from a;").print();;
+
         st.executeUpdate("delete from a where num=1;");
-        st.executeQuery("select * from a;");
+        st.executeQuery("select * from a;").print();;
 
 
         st.close();

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-11 17:10:11
- * @LastEditTime: 2020-12-25 20:24:47
+ * @LastEditTime: 2020-12-25 20:31:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Statement.java
@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import javax.print.DocFlavor.STRING;
 
 import sql.Parser;
 import sql.Request;
@@ -110,7 +112,7 @@ public class Statement implements AutoCloseable {
         Object[] key_value = new Object[3];
         if(order.contains("=")) {
 
-            String[] orders = order.split("=");
+            String[] orders = order.split("\\s*=\\s*");
             if(orders.length > 2) return null;
 
             for (Head head : heads) {
@@ -330,7 +332,7 @@ public class Statement implements AutoCloseable {
                     if(satisfy_where(key_value, item, class_type)) {
                         for (String s : set) {
                             Object[] data_new = check_where(s, heads);
-                            if(data_new != null && (int)data_new[2] == 1) {
+                            if(data_new != null && (int)data_new[2] == 0) {
                                 var class_t = heads[(int)data_new[0]].getKind();
                                 item[(int)data_new[0]] = class_t.cast(data_new[1]);  
                                 
