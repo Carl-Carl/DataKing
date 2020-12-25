@@ -329,8 +329,9 @@ public class Statement implements AutoCloseable {
                 for (Object[] item : items) {
                     if(satisfy_where(item, key_value, class_type)) {
                         for (String s : set) {
-                            Object[] data_new = check_where(s, heads);
-                            if(data_new != null && (int)data_new[2] == 1) {
+                            String s_ = s.trim();
+                            Object[] data_new = check_where(s_, heads);
+                            if(data_new != null && (int)data_new[2] == 0) {
                                 item[(int)data_new[0]] = (String)data_new[1];
                             }
                         }
