@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-15 12:26:17
- * @LastEditTime: 2020-12-25 14:33:21
+ * @LastEditTime: 2020-12-25 16:38:49
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Connection.java
@@ -109,7 +109,7 @@ public class Connection implements AutoCloseable {
         st.executeUpdate("create a num=integer, name=string;");
         st.executeUpdate("insert into a values (1, mike);");
         st.executeUpdate("insert into a values (2, hhh);");
-        st.executeQuery("select num,name from a;");
+        st.executeQuery("select num,name from a where num=1;");
         st.resultSet.print();
         st.close();
         con.commit();

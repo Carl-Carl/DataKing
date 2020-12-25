@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-11 17:10:11
- * @LastEditTime: 2020-12-25 15:30:22
+ * @LastEditTime: 2020-12-25 16:46:51
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Statement.java
@@ -209,8 +209,8 @@ public class Statement implements AutoCloseable {
                     for (Object[] item : items) {
 
                         if(class_type.equals(Integer.class)){
-                            var x1 = Integer.class.cast(item[num]);
-                            var x2 = Integer.class.cast(key_value[1]);
+                            var x1 = Integer.class.cast(Integer.parseInt((String)item[num]));
+                            var x2 = Integer.class.cast(Integer.parseInt((String)key_value[1]));
                             if(x1.compareTo(x2) == (Integer)key_value[2]){
                                 for (Integer integer : chosen) {
                                     temp.add(item[integer]);
