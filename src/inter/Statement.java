@@ -216,24 +216,26 @@ public class Statement implements AutoCloseable {
                 int size = names.length;
                 ArrayList<Class<?>> col = new ArrayList<Class<?>>();
                 ArrayList<Integer> chosen = new ArrayList<Integer>();
+                ArrayList<String> names_ = new ArrayList<String>();
                 assert pack != null;
                 var a = pack.getHeads();
                 for (int i = 0; i < a.length; i++){
                     if(names[0].equals("*")){
                         col.add(a[i].getKind());
                         chosen.add(a[i].getId());
+                        names_.add(a[i].getName());
                     }
                     else if(names[i].equals(a[i].getName())){
                         col.add(a[i].getKind());
                         chosen.add(a[i].getId());
+                        names_.add(a[i].getName());
                     }
                 }
-                
+                int len = a.length;
                 try {
-                    Pack result = new Pack(root, table[0], names, (Class<?>[])col.toArray(new Class<?>[size]));
+                    Pack result = new Pack(root, table[0], (String[])names_.toArray(new String[len]), (Class<?>[])col.toArray(new Class<?>[len]));
                     var items = pack.getAll();
                     ArrayList<Object> temp = new ArrayList<Object>();
-
                     Object[] key_value = check_where(request.getWhere(), pack.getHeads());
                     int num = (int)key_value[0];
                     var class_type = a[(int)key_value[0]].getKind();
