@@ -25,8 +25,6 @@ public class Connection implements AutoCloseable {
      * Locate a directory as the root of database
      * 
      * @param URL
-     * @param user
-     * @param password
      * @throws Exception
      */
     Connection(String URL) throws Exception {

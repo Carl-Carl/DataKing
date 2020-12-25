@@ -8,15 +8,11 @@
  */
 package core;
 
-import com.google.gson.annotations.Expose;
-
 public class Head {
 
-    @Expose
+
     private final Class<?> kind;
-    @Expose
     private final int id;
-    @Expose
     private final String name;
 
     public Class<?> getKind() {
