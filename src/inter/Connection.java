@@ -107,8 +107,8 @@ public class Connection implements AutoCloseable {
         var con = DriverManager.getConnection("dataking:URL.db");
         var st = con.getStatement();
         st.executeUpdate("create a num=integer, name=string;");
-        st.executeUpdate("insert into a values (1, mike);");
-        st.executeUpdate("insert into a values (2, hhh);");
+        st.executeUpdate("insert into b values (1, mike);");
+        st.executeUpdate("insert into a values (2, hhh, haha);");
         st.executeUpdate("insert into a values (3, 333);");
         st.executeQuery("select * from a;");
         st.resultSet.print();
