@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-11 17:10:11
- * @LastEditTime: 2020-12-25 13:54:49
+ * @LastEditTime: 2020-12-25 14:26:34
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Statement.java
@@ -69,7 +69,7 @@ public class Statement {
             return false;
         Request[] requests = Parser.parse(sql);
         SQLHandler handler = new SQLHandler();
-        assert requests != null;
+        
         for (Request request : requests) {
             if(request.getType().equals(Request.Type.DELETE)) handler.Handle(request);
             else if(request.getType().equals(Request.Type.INSERT)) handler.Handle(request);
@@ -138,11 +138,13 @@ public class Statement {
                         chosen.add(a[i].getId());
                     }
                 }
+
                 try {
                     resultSet = new ResultSet(root, table[0], names, (Class<?>[])col.toArray(new Class<?>[size]));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                
                 var items = pack.getAll();
                 ArrayList<Object> temp = new ArrayList<Object>();
                 for (Object[] item : items) {
@@ -176,14 +178,15 @@ public class Statement {
                         return;
                     }
                     name_.add(split[0]);
-                    if (split[1].equals("String")){
+                    if (split[1].equalsIgnoreCase("string")){
                         columns_.add(String.class);
-                    }if (split[1].equals("Integer")){
+                    } else if (split[1].equalsIgnoreCase("Integer")){
                         columns_.add(Integer.class);
-                    }if (split[1].equals("Double")){
+                    } else if (split[1].equalsIgnoreCase("Double")){
                         columns_.add(Double.class);
                     }
-                    else System.out.println("Unknown type!\n");
+                    else 
+                        System.out.println("Unknown type!\n");
                 }
     
                 int size_of_name = name_.size();

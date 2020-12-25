@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-15 12:26:17
- * @LastEditTime: 2020-12-25 14:08:38
+ * @LastEditTime: 2020-12-25 14:33:21
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Connection.java
@@ -63,7 +63,7 @@ public class Connection {
             }
         }
         
-        Statement statement = new Statement(this, root.substring(9), packs);
+        Statement statement = new Statement(this, root, packs);
         return statement;
     }
 
@@ -106,7 +106,11 @@ public class Connection {
     public static void main(String[] args) throws Exception {
         var con = DriverManager.getConnection("dataking:URL.db");
         var st = con.getStatement();
-        st.executeUpdate("create a num=int, name=string;");
+        st.executeUpdate("create a num=integer, name=string;");
+        st.executeUpdate("insert into a values (1, mike);");
+        st.executeUpdate("insert into a values (2, hhh);");
+        st.executeQuery("select num,name from a;");
+        st.resultSet.Print();
         st.close();
         con.commit();
         con.close();

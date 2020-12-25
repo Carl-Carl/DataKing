@@ -3,7 +3,7 @@
     create "from" "set"
     select "set" from "from" (where "where") + (orderby "order")
     update "from" set "set" + (where "where")
-    insert into "from" ("set") values "values"
+    insert into "from" ("set") values ("values")
     delete from "from" (where "where")
     drop "from"
 
