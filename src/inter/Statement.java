@@ -207,7 +207,16 @@ public class Statement {
         private final Query update = new Query() {
             @Override
             public void query(Request request) {
-
+                String[] table = request.getFrom();
+                try {
+                    Pack pack = getPack(table[0]);
+                    var items = pack.getAll();
+                    for (Object[] item : items) {
+                        item = null;
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         };
     
@@ -229,7 +238,7 @@ public class Statement {
         private final Query delete = new Query() {
             @Override
             public void query(Request request) {
-    
+
             }
         };
     
@@ -244,8 +253,12 @@ public class Statement {
                 }
             }
         };
+<<<<<<< HEAD
+    };
+=======
     }
     
+>>>>>>> 3acac7d88196976fc77b24f611e19f6584dded7c
     public boolean isActive() {
         return active;
     }
