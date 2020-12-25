@@ -32,10 +32,10 @@ public class FileSwitch {
             String[] types = gson.fromJson(str, new TypeToken<String[]>(){}.getType());
             ArrayList<Class<?>> columns = new ArrayList<Class<?>>();
             for (String type : types) {
-                if(type.equals("str")){
+                if(type.equalsIgnoreCase("str")){
                     columns.add(String.class);
                 }
-                else if(type.equals("int")){
+                else if(type.equalsIgnoreCase("int")){
                     columns.add(String.class);
                 }
                 else columns.add(Double.class);
