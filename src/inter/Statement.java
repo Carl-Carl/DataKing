@@ -330,7 +330,7 @@ public class Statement implements AutoCloseable {
                     if(satisfy_where(item, key_value, class_type)) {
                         for (String s : set) {
                             String s_ = s.trim();
-                            Object[] data_new = check_where(s_,   heads);
+                            Object[] data_new = check_where(s_, heads);
                             if(data_new != null && (int)data_new[2] == 0) {
                                 item[(int)data_new[0]] = (String)data_new[1];
                             }
