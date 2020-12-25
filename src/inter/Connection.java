@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-15 12:26:17
- * @LastEditTime: 2020-12-23 20:57:41
+ * @LastEditTime: 2020-12-25 13:52:01
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Connection.java
@@ -19,7 +19,7 @@ public class Connection {
     
     private String root;
     private boolean active = true;
-    ArrayList<String> temps = new ArrayList<String>();
+    HashSet<String> temps = new HashSet<String>();
 
     /**
      * Locate a directory as the root of database
@@ -55,7 +55,11 @@ public class Connection {
         for (var temp : temps) {
             File tempFile = new File(root + "/" + temp + ".temp");
             if (tempFile.exists()) {
-//                packs.add(e);
+                try {
+                    packs.add(FileSwitch.ToPack(root, temp + ".temp"));
+                } catch (Exception e) {
+                    System.err.println("File not find: " + temp);
+                }
             }
         }
         
@@ -79,6 +83,10 @@ public class Connection {
                 tempFile.renameTo(originFile);
             }
         }
+    }
+
+    void addTemp(String[] tables) {
+        temps.addAll(Arrays.asList(tables));
     }
 
     /**
