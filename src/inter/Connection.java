@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-15 12:26:17
- * @LastEditTime: 2020-12-25 17:39:13
+ * @LastEditTime: 2020-12-25 20:29:01
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Connection.java
@@ -106,12 +106,13 @@ public class Connection implements AutoCloseable {
     public static void main(String[] args) throws Exception {
         var con = DriverManager.getConnection("dataking:URL.db");
         var st = con.getStatement();
-        st.executeUpdate("create a num=integer, name=string;");
-        st.executeUpdate("insert into b values (1, mike);");
-        st.executeUpdate("insert into a values (2, hhh, haha);");
-        st.executeUpdate("insert into a values (3, 333);");
-        st.executeQuery("select * from a;");
-        st.resultSet.print();
+        st.executeUpdate("update a set name = kite where num=2 ;");
+        st.executeQuery("select * from a;").print();;
+
+        st.executeUpdate("delete from a where num=1;");
+        st.executeQuery("select * from a;").print();;
+
+
         st.close();
         con.commit();
         con.close();

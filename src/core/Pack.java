@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-16 14:00:09
- * @LastEditTime: 2020-12-25 15:55:07
+ * @LastEditTime: 2020-12-25 19:34:43
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\sql\pack.java
@@ -138,7 +138,6 @@ public class Pack  {
         if (obj.getClass().cast(obj) == Integer.class) {
             Integer in = Integer.class.cast(obj);
         }
-        
 
         try {
             Pack pk = new Pack("rt", "123", new String[]{"1", "2", "3"}, a);
@@ -146,9 +145,13 @@ public class Pack  {
             pk.add(new Object[]{4, 5.0, 6});
             pk.add(new Object[]{4, 7.0, 6});
             
-            Gson gs = new Gson();
-            String str = gs.toJson(pk, Pack.class);
-            System.out.println(str);
+            var col = pk.getAll();
+            var it = col.iterator();
+            
+            var k = it.next();
+            it.next();
+            it.remove();
+            var x = pk.elements;
         } catch (Exception e) {
             System.out.println(e);
         }

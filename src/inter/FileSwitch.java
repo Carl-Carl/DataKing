@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-24 20:51:36
- * @LastEditTime: 2020-12-25 13:38:49
+ * @LastEditTime: 2020-12-25 20:07:51
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\FileSwitch.java
@@ -22,7 +22,7 @@ public class FileSwitch {
 
     public static Pack ToPack(String root, String table) {
         Gson gson = new Gson();
-        File file = new File(root + File.separator + table +".temp");
+        File file = new File(root + File.separator + table +".dk");
         try (BufferedReader reader = new BufferedReader(new FileReader(file))){
 
             String str;
