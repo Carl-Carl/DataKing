@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-24 20:51:36
- * @LastEditTime: 2020-12-25 20:07:51
+ * @LastEditTime: 2020-12-25 21:23:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\FileSwitch.java
@@ -32,11 +32,11 @@ public class FileSwitch {
             String[] types = gson.fromJson(str, new TypeToken<String[]>(){}.getType());
             ArrayList<Class<?>> columns = new ArrayList<Class<?>>();
             for (String type : types) {
-                if(type.equals("str")){
+                if(type.equalsIgnoreCase("str")){
                     columns.add(String.class);
                 }
-                else if(type.equals("int")){
-                    columns.add(String.class);
+                else if(type.equalsIgnoreCase("int")){
+                    columns.add(Integer.class);
                 }
                 else columns.add(Double.class);
             }
