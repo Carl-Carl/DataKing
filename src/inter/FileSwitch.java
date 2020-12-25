@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class FileSwitch {
 
-    private FileSwitch() {
+    public FileSwitch() {
     }
 
     public static Pack ToPack(String root, String table) throws FileNotFoundException {
