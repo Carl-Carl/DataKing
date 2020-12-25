@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-11 17:10:11
- * @LastEditTime: 2020-12-25 17:39:05
+ * @LastEditTime: 2020-12-25 20:24:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Statement.java
@@ -89,8 +89,8 @@ public class Statement implements AutoCloseable {
         String[] file_list = file.list();
         assert file_list != null;
         for (String s : file_list) {
-            if(table.equals(s)){
-                return FileSwitch.ToPack(root, s);
+            if(table.equals(s.substring(0, s.length()-3))){
+                return FileSwitch.ToPack(root, s.substring(0, s.length()-3));
             }
         }
         for (Pack pack : packs) {
@@ -327,11 +327,13 @@ public class Statement implements AutoCloseable {
                 Object[] key_value = check_where(request.getWhere(), pack.getHeads());
                 var class_type = key_value == null ? null : heads[(int)key_value[0]].getKind();
                 for (Object[] item : items) {
-                    if(satisfy_where(item, key_value, class_type)) {
+                    if(satisfy_where(key_value, item, class_type)) {
                         for (String s : set) {
                             Object[] data_new = check_where(s, heads);
                             if(data_new != null && (int)data_new[2] == 1) {
-                                item[(int)data_new[0]] = (String)data_new[1];
+                                var class_t = heads[(int)data_new[0]].getKind();
+                                item[(int)data_new[0]] = class_t.cast(data_new[1]);  
+                                
                             }
                         }
                     }
