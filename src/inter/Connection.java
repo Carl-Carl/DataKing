@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-15 12:26:17
- * @LastEditTime: 2020-12-25 13:57:08
+ * @LastEditTime: 2020-12-25 14:03:45
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Connection.java
@@ -103,12 +103,10 @@ public class Connection {
         this.temps = null;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         var con = DriverManager.getConnection("dataking:URL.db");
-        var str = con.getRoot();
-        con.temps.add("a");
-        con.commit();
-        con.close();
+        var st = con.getStatement();
+        st.executeUpdate("create a num=int, name=string;");
     }
 
     public boolean isActive() {
