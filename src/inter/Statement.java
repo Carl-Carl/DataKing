@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-11 17:10:11
- * @LastEditTime: 2020-12-25 17:28:06
+ * @LastEditTime: 2020-12-25 17:39:05
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Statement.java
@@ -237,8 +237,8 @@ public class Statement implements AutoCloseable {
                     var items = pack.getAll();
                     ArrayList<Object> temp = new ArrayList<Object>();
                     Object[] key_value = check_where(request.getWhere(), pack.getHeads());
-                    int num = (int)key_value[0];
-                    var class_type = a[(int)key_value[0]].getKind();
+
+                    var class_type = key_value == null ? null : a[(int)key_value[0]].getKind();
                     for (Object[] item : items) {
                         if(satisfy_where(key_value, item, class_type)){
                             for (Integer integer : chosen) {
