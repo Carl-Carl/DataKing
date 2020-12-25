@@ -254,6 +254,18 @@ public class Statement {
             }
         };
     };
+
+    public void close(){
+        ArrayList<String> temp = new ArrayList<String>();
+        for (Pack pack : packs) {
+            CreateFile.createJsonFile(pack, root);
+            temp.add(pack.getTable());
+        }
+        int size = temp.size();
+        String[] list = (String [])temp.toArray(new String[size]);
+        connection.addTemp(list);
+        active = false;
+    }
     
     public boolean isActive() {
         return active;
