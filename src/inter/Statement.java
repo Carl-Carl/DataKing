@@ -14,12 +14,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 import sql.Parser;
 import sql.Request;
-import core.*;
 import core.sql.*;
 
 public class Statement {
@@ -45,17 +42,17 @@ public class Statement {
      * @param sql
      * @return The result
      */
-    public boolean executeQuery(String sql) throws FileNotFoundException {
+    public ResultSet executeQuery(String sql){
         if (!active)
-            return false;
+            return null;
         Request[] requests = Parser.parse(sql);
+        if(requests == null) return null;
         SQLHandler handler = new SQLHandler();
-        assert requests != null;
         for (Request request : requests) {
             if(request.getType().equals(Request.Type.SELECT)) handler.Handle(request);
             else System.out.println("Can't resolve \"" + sql +"\" in this query!\n");
         }
-        return true;
+        return resultSet;
     }
 
     /**
@@ -64,12 +61,12 @@ public class Statement {
      * @return If you change the database successfully, the function
      * will return true, otherwise it will return false.
      */
-    public boolean executeUpdate(String sql) throws FileNotFoundException {
+    public boolean executeUpdate(String sql) {
         if (!active)
             return false;
         Request[] requests = Parser.parse(sql);
+        if(requests == null) return false;
         SQLHandler handler = new SQLHandler();
-        
         for (Request request : requests) {
             if(request.getType().equals(Request.Type.DELETE)) handler.Handle(request);
             else if(request.getType().equals(Request.Type.INSERT)) handler.Handle(request);
@@ -104,7 +101,8 @@ public class Statement {
     }
 
     private boolean check_where(String where){
-     return true;
+
+        return true;
     }
 
     class SQLHandler {
@@ -242,7 +240,6 @@ public class Statement {
 
                 String[] table = request.getFrom();
                 Pack pack = getPack(table[0]);
-                assert pack != null;
                 pack.add(request.getValues());
 
             }
