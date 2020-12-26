@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-18 10:46:45
- * @LastEditTime: 2020-12-26 15:26:34
+ * @LastEditTime: 2020-12-26 15:28:47
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\sql\ResultSet.java
@@ -58,22 +58,6 @@ public class ResultSet {
         pointer = items.iterator();
     }
 
-    /**
-     * Item
-     */
-    private class Item {
-
-        private final Object[] content;
-
-        public Item(Object[] content) {
-            this.content = content;
-        }
-
-        public Object[] getContent() {
-            return content;
-        }
-    }
-
     public boolean next() {
         if (!pointer.hasNext()) {
             return false;
@@ -118,9 +102,5 @@ public class ResultSet {
             }
             System.out.println("");
         }
-    }
-
-    public static void main(String[] args) {
-        
     }
 }
