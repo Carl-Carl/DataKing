@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-11 17:10:47
- * @LastEditTime: 2020-12-16 13:56:21
+ * @LastEditTime: 2020-12-25 22:08:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\sql\Parser.java
@@ -193,8 +193,6 @@ public class Parser {
         """)) {
             System.out.println(i.toString());
         }
-
-        
 
         return;
     }
