@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-11 17:10:11
- * @LastEditTime: 2020-12-25 21:48:33
+ * @LastEditTime: 2020-12-26 15:29:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Statement.java
@@ -212,7 +212,7 @@ public class Statement implements AutoCloseable {
                 String[] order_by = request.getOrder();
                 boolean sort = order_by != null;
                 boolean legal_sort = false;
-                boolean ascend;
+                boolean ascend = true;
                 String key = null;
                 if(order_by != null){
                     if(order_by.length != 2) return;
@@ -241,7 +241,7 @@ public class Statement implements AutoCloseable {
                     for (Head head : a) {
                         if(key.equals(head.getName())){
                             legal_sort = true;
-                            break;;
+                            break;
                         }
                     }
                     if(!legal_sort){
@@ -279,9 +279,9 @@ public class Statement implements AutoCloseable {
                             temp.clear();
                         } 
                     }
-                    if(!sort) resultSet = ResultSet(pack);
+                    if(!sort) resultSet = new ResultSet(pack);
                     else {
-                        resultSet = ResultSet(pack, ascend, key);
+                        resultSet = new ResultSet(pack, ascend, key);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
