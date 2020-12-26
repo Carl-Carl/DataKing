@@ -42,8 +42,8 @@ public class CreateFile {
         s.append(gson.toJson(columns_)).append("\n");
         var a = pack.getAll();
         for (Object[] objects : a) {
-            String[] item = (String[])objects;
-            s.append(gson.toJson(item)).append("\n");
+            var item = gson.toJson(objects);
+            s.append(item).append("\n");
         }
         return s.toString();
     }
@@ -85,10 +85,9 @@ public class CreateFile {
         String[] name = {"name", "score", "age"};
         Class<?>[] columns = {String.class, Integer.class, Integer.class};
         Pack pack = new Pack("1", table, name, columns);
-        pack.add(new Object[]{"a", 10, 9});
-        pack.add(new Object[]{"b", 100, 89});
-
-        createJsonFile(pack, "Dataking/Class4");
+        Gson gson = new Gson();
+        String item = gson.toJson(new Object[]{"a", 10, 9});
+        System.out.println(item);
     }
 
 }

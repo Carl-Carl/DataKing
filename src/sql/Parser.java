@@ -96,27 +96,27 @@ public class Parser {
      * Basic Patterns
      */
     private static final Pattern CREATE_PATTERN = Pattern.compile(
-        "(?i)\\s*create\\s+(\\S+)\\s+(.+?)\\s*(.*);(.*)"
+        "(?i)\\s*create\\s+(\\S+)\\s+(.+?)\\s*;(.*)"
     );
 
     private static final Pattern SELECT_PATTERN = Pattern.compile(
-        "(?i)\\s*select\\s+(.+?)"+FROM+WHERE+ORDER+"(.*);(.*)"
+        "(?i)\\s*select\\s+(.+?)"+FROM+WHERE+ORDER+"\\s*;(.*)"
     );
 
     private static final Pattern UPDATE_PATTERN = Pattern.compile(
-        "(?i)\\s*update\\s+(\\S+)\\s+set\\s+(.+?)"+WHERE+"(.*);(.*)"
+        "(?i)\\s*update\\s+(\\S+)\\s+set\\s+(.+?)"+WHERE+"\\s*;(.*)"
     );
 
     private static final Pattern INSERT_PATTERN = Pattern.compile(
-        "(?i)\\s*insert\\s+into\\s+(\\S+)(?:\\s+\\((.+?)\\))?"+VALUES+"(.*);(.*)"
+        "(?i)\\s*insert\\s+into\\s+(\\S+)(?:\\s+\\((.+?)\\))?"+VALUES+"\\s*;(.*)"
     );
 
     private static final Pattern DELETE_PATTERN = Pattern.compile(
-        "(?i)\\s*delete"+FROM+WHERE+"(.*);(.*)"
+        "(?i)\\s*delete"+FROM+WHERE+"\\s*;(.*)"
     );
 
     private static final Pattern DROP_PATTERN = Pattern.compile(
-        "(?i)\\s*drop\\s+(.+?)"+"(.*);(.*)"
+        "(?i)\\s*drop\\s+(.+?)"+"\\s*;(.*)"
     );
 
     private static Sentence[] sentences = {

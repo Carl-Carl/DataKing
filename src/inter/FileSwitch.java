@@ -44,8 +44,18 @@ public class FileSwitch {
             Class<?>[] columns_ = (Class<?>[]) columns.toArray(new Class<?>[length]);
             Pack pack = new Pack(root, table, names, columns_);
             while(null != (str = reader.readLine())){
-                Object[] item = gson.fromJson(str, new TypeToken<Object[]>(){}.getType());
-                pack.add(item);
+                String[] item = gson.fromJson(str, new TypeToken<String[]>(){}.getType());
+                Object[] element = new Object[item.length];
+                for (int i = 0; i < item.length; i++) {
+                    if(types[i].equalsIgnoreCase("str")){
+                        element[i] = item[i];
+                    }
+                    else if(types[i].equalsIgnoreCase("int")){
+                        element[i] = Integer.parseInt(item[i]);
+                    }
+                    else element[i] = Double.parseDouble(item[i]);
+                }
+                pack.add(element);
             }
             return pack;
         } catch (Exception e) {

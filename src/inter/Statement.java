@@ -161,7 +161,7 @@ public class Statement implements AutoCloseable {
 
         if(class_type.equals(Integer.class)){
             int num = (int)key_value[0];
-            var x1 = Integer.class.cast(Integer.parseInt((String)item[num]));
+            var x1 = Integer.class.cast(item[num]);
             var x2 = Integer.class.cast(Integer.parseInt((String)key_value[1]));
             if(x1.compareTo(x2) == (int)key_value[2]) return true;
             else return false;
@@ -175,7 +175,7 @@ public class Statement implements AutoCloseable {
         }
         else if(class_type.equals(Double.class)){
             int num = (int)key_value[0];
-            var x1 = Double.class.cast(Double.parseDouble((String)item[num]));
+            var x1 = Double.class.cast(item[num]);
             var x2 = Double.class.cast(Double.parseDouble((String)key_value[1]));
             if(x1.compareTo(x2) == (int)key_value[2]) return true;
             else return false;
@@ -279,9 +279,9 @@ public class Statement implements AutoCloseable {
                             temp.clear();
                         } 
                     }
-                    if(!sort) resultSet = new ResultSet(pack);
+                    if(!sort) resultSet = new ResultSet(result);
                     else {
-                        resultSet = new ResultSet(pack, ascend, key);
+                        resultSet = new ResultSet(result, ascend, key);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -393,13 +393,23 @@ public class Statement implements AutoCloseable {
                     System.out.println("No table found!");
                     return;
                 }
-                String[] values = request.getValues();
+                String[] item = request.getValues();
                 Head[] heads = pack.getHeads();
-                if (values.length != heads.length) {
+                if (item.length != heads.length) {
                     System.out.println("Wrong insert data!");
                     return;
                 }
-                pack.add(values);
+                Object[] element = new Object[item.length];
+                for (int i = 0; i < item.length; i++) {
+                    if(heads[i].getKind().equals(String.class)){
+                        element[i] = item[i];
+                    }
+                    else if(heads[i].getKind().equals(Integer.class)){
+                        element[i] = Integer.parseInt(item[i]);
+                    }
+                    else element[i] = Double.parseDouble(item[i]);
+                }
+                pack.add(element);
             }
         };
 
