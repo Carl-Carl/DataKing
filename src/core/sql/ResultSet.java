@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-18 10:46:45
- * @LastEditTime: 2020-12-25 17:07:52
+ * @LastEditTime: 2020-12-26 14:26:32
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\sql\ResultSet.java
@@ -19,7 +19,7 @@ public class ResultSet {
     private Iterator<Object[]> pointer;
     private Object[] current;
 
-    public ResultSet(Pack pack) {
+    public ResultSet(List<Pack> Packs, boolean sort, boolean ascend, String key) {
         heads = pack.getHead();
         pointer = pack.getAll().iterator();
         parent = pack;
