@@ -1,14 +1,12 @@
 <component name="ArtifactManager">
-  <artifact build-on-make="true" name="DataKing:jar">
+  <artifact type="jar" build-on-make="true" name="DataKing:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/DataKing_jar</output-path>
-    <root id="root">
-      <element id="archive" name="DataKing.jar">
-        <element id="directory" name="META-INF">
-          <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
-        </element>
-        <element id="module-output" name="DataKing" />
+    <root id="archive" name="DataKing.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
       </element>
-      <element id="library" level="application" name="gson-2.8.6" />
+      <element id="module-output" name="DataKing" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../../Java/gson-2.8.6.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

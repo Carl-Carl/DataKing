@@ -10,14 +10,9 @@
 package tools;
 
 import java.util.Scanner;
-
-import inter.Connection;
-import inter.DriverManager;
-import inter.Statement;
+import sql.*;
 
 public class Console {
-
-
 
     public static void main(String[] args) {
         while (true) {

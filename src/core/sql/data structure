@@ -1,3 +1,0 @@
-HashSet<Data[]> 作为底层存储结构
-Hashmap<String, head> 建立索引
-data[0] 作为主关键字

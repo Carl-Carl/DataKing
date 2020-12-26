@@ -8,9 +8,9 @@
  */
 package core.sql;
 
-import sql.Request;
-
 import java.io.FileNotFoundException;
+
+import parser.Request;
 
 /**
  * An universal interface for query

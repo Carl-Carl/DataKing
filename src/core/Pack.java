@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-16 14:00:09
- * @LastEditTime: 2020-12-26 15:39:12
+ * @LastEditTime: 2020-12-26 16:55:24
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\sql\pack.java
@@ -9,13 +9,8 @@
 package core;
 
 import java.util.*;
-
-import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
-
-import core.sql.ResultSet;
-
-import java.sql.Statement;
+import sql.*;
 
 public class Pack  {
     
