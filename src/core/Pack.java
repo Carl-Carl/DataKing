@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-16 14:00:09
- * @LastEditTime: 2020-12-25 19:34:43
+ * @LastEditTime: 2020-12-26 15:26:57
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\sql\pack.java
@@ -12,6 +12,8 @@ import java.util.*;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
+
+import core.sql.ResultSet;
 
 import java.sql.Statement;
 
@@ -141,17 +143,16 @@ public class Pack  {
 
         try {
             Pack pk = new Pack("rt", "123", new String[]{"1", "2", "3"}, a);
-            pk.add(new Object[]{1, 2.0, 3});
-            pk.add(new Object[]{4, 5.0, 6});
-            pk.add(new Object[]{4, 7.0, 6});
+            pk.add(new Object[]{"1", "2.0", "3"});
+            pk.add(new Object[]{"14", "5.0", "6"});
+            pk.add(new Object[]{"3", "7.0", "6"});
+            pk.add(new Object[]{"2", "7.0", "6"});
+            pk.add(new Object[]{"5", "7.0", "6"});
             
-            var col = pk.getAll();
-            var it = col.iterator();
-            
-            var k = it.next();
-            it.next();
-            it.remove();
-            var x = pk.elements;
+            ResultSet res = new ResultSet(pk, true, "1");
+            while (res.next()) {
+                System.out.println(res.getInt("1").toString());
+            }
         } catch (Exception e) {
             System.out.println(e);
         }
