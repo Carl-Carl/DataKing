@@ -1,12 +1,12 @@
 /*
  * @Author: your name
  * @Date: 2020-12-14 19:36:34
- * @LastEditTime: 2020-12-15 16:16:37
- * @LastEditors: your name
+ * @LastEditTime: 2020-12-26 19:13:00
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\sql\Query.java
  */
-package core.sql;
+package core;
 
 import java.io.FileNotFoundException;
 

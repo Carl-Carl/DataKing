@@ -1,7 +1,7 @@
 /*
 * @Author: your name
 * @Date: 2020-12-25 14:51:55
- * @LastEditTime: 2020-12-25 21:44:10
+ * @LastEditTime: 2020-12-26 23:34:07
  * @LastEditors: Please set LastEditors
 * @Description: In User Settings Edit
 * @FilePath: \DataKing\src\tools\Console.java
@@ -17,7 +17,7 @@ public class Console {
     public static void main(String[] args) {
         while (true) {
             var sc = new Scanner(System.in);
-            System.out.println("Open the database: ");
+            System.out.print("Open the database:\nData King >> ");
             String dbName = sc.nextLine().trim();
             Connection con = DriverManager.getConnection("dataking:" + dbName + ".db");
 
@@ -26,9 +26,10 @@ public class Console {
 
                 System.out.println("Open database \""+ dbName + "\" successfully.");
                 System.out.println("Please input SQL orders.");
-                System.out.println("Input \"exit\" to close.");
-                
-            while (true) {
+                System.out.println("Input \"exit\" to close.\n");
+
+            System.out.print("Data King >> ");
+            while (sc.hasNext()) {
                 Statement st = con.getStatement();
                 String sql = sc.nextLine().trim();
                 if (sql.equalsIgnoreCase("exit")) {
@@ -45,7 +46,9 @@ public class Console {
                     System.out.println("Invalid input.");
                 st.close();
                 con.commit();
+                System.out.print("Data King >> ");
             }
+            
         }
     }
 }

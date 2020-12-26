@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-11 17:10:11
- * @LastEditTime: 2020-12-26 15:29:55
+ * @LastEditTime: 2020-12-26 19:12:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Statement.java
@@ -16,11 +16,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.print.DocFlavor.STRING;
-
-import core.sql.*;
-import parser.Parser;
-import parser.Request;
+import core.*;
+import parser.*;
 
 public class Statement implements AutoCloseable {
 

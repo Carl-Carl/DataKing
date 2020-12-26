@@ -1,15 +1,13 @@
 /*
  * @Author: your name
  * @Date: 2020-12-22 12:30:16
- * @LastEditTime: 2020-12-26 18:36:58
+ * @LastEditTime: 2020-12-26 19:13:37
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\CreateFile.java
  */
-package sql;
+package core;
 import com.google.gson.Gson;
-import core.Head;
-import core.Pack;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
