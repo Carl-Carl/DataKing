@@ -42,9 +42,8 @@ public class CreateFile {
         s.append(gson.toJson(columns_)).append("\n");
         var a = pack.getAll();
         for (Object[] objects : a) {
-            String item;
-            item = gson.toJson(objects);
-            s.append(item).append("\n");
+            String[] item = (String[])objects;
+            s.append(gson.toJson(item)).append("\n");
         }
         return s.toString();
     }
