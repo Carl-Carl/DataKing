@@ -221,19 +221,21 @@ public class Statement implements AutoCloseable {
                 ArrayList<Integer> chosen = new ArrayList<Integer>();
                 ArrayList<String> names_ = new ArrayList<String>();
                 var a = pack.getHeads();
-                for (int i = 0; i < a.length; i++){
+                int i, j;
+                for (i = 0, j = 0; i < a.length && j < size; i++){
                     if(names[0].equals("*")){
                         col.add(a[i].getKind());
                         chosen.add(a[i].getId());
                         names_.add(a[i].getName());
                     }
-                    else if(names[i].equals(a[i].getName())){
+                    else if(names[j].equals(a[i].getName())){
                         col.add(a[i].getKind());
                         chosen.add(a[i].getId());
                         names_.add(a[i].getName());
+                        j++;
                     }
                 }
-                int len = a.length;
+                int len = chosen.size();
                 try {
                     Pack result = new Pack(root, table[0], (String[])names_.toArray(new String[len]), (Class<?>[])col.toArray(new Class<?>[len]));
                     var items = pack.getAll();
@@ -396,10 +398,24 @@ public class Statement implements AutoCloseable {
             public void query(Request request) {
 
                 String[] table = request.getFrom();
-                File file = new File(root + File.separator + table[0] + ".db");
+                for (Pack pack : packs) {
+                    if(table[0].equals(pack.getTable())){
+                        packs.remove(pack);
+                        return;
+                    }
+                }
+                File file = new File(root + File.separator + table[0] + ".dk");
                 if (file.exists()) {
                     file.delete();
+                    return;
                 }
+                else{
+                    file = new File(root + File.separator+table[0] + ".temp");
+                    if(file.exists()){
+                        file.delete();
+                    }
+                }
+
             }
         };
     };
