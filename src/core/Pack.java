@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-16 14:00:09
- * @LastEditTime: 2020-12-26 15:26:57
+ * @LastEditTime: 2020-12-26 15:39:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\sql\pack.java
@@ -149,7 +149,7 @@ public class Pack  {
             pk.add(new Object[]{"2", "7.0", "6"});
             pk.add(new Object[]{"5", "7.0", "6"});
             
-            ResultSet res = new ResultSet(pk, true, "1");
+            ResultSet res = new ResultSet(pk, false, "1");
             while (res.next()) {
                 System.out.println(res.getInt("1").toString());
             }
