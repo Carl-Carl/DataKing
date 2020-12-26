@@ -3,7 +3,18 @@ create students id = integer, name = string, score = double;
 insert into students values (1, Mike, 100.0);
 insert into students values (3, Jack, 95.0);
 insert into students values (2, Kim , 70.5);
+insert into students values (6, Tom , 10.5);
 insert into students values (5, Ken , 59.0);
 insert into students values (4, Jack, 88.5);
+
 select * from students;
-select * from students where score < 60;
+select * from students where score < 80 order by (name) asc;
+select * from students where score > 85.5 order by (score) desc;
+
+delete from students where name = Jack;
+select name from students;
+
+update students set (score = 60) where score > 50;
+select * from students;
+
+drop students;
