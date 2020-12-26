@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-11 17:09:53
- * @LastEditTime: 2020-12-17 13:55:52
+ * @LastEditTime: 2020-12-26 19:13:46
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\DriverManager.java
@@ -10,7 +10,6 @@ package sql;
 
 import java.io.*;
 import java.util.HashMap;
-
 import com.google.gson.Gson;
 
 public class DriverManager {

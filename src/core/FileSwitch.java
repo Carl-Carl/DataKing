@@ -1,16 +1,15 @@
 /*
  * @Author: your name
  * @Date: 2020-12-24 20:51:36
- * @LastEditTime: 2020-12-26 18:37:17
+ * @LastEditTime: 2020-12-26 19:13:08
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\FileSwitch.java
  */
-package sql;
+package core;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import core.Pack;
 
 import java.io.*;
 import java.util.ArrayList;
