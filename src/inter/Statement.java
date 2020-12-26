@@ -277,7 +277,7 @@ public class Statement implements AutoCloseable {
                             Object[] element = (Object[])temp.toArray(new Object[size]);
                             result.add(element);
                             temp.clear();
-                        }
+                        } 
                     }
                     if(!sort) resultSet = ResultSet(pack);
                     else {
