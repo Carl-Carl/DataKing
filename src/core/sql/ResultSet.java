@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-18 10:46:45
- * @LastEditTime: 2020-12-26 15:28:47
+ * @LastEditTime: 2020-12-26 15:38:49
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\sql\ResultSet.java
@@ -43,10 +43,10 @@ public class ResultSet {
         }
 
         items.sort((Object[] a, Object[] b) -> {
-            return ((Comparable)a[sortKey]).compareTo((Comparable)b[sortKey]);
+            int x = ascend ? 1 : -1;
+            return x * ((Comparable)a[sortKey]).compareTo((Comparable)b[sortKey]);
         });
         pointer = items.iterator();
-
     }
 
     public ResultSet(Pack pack) {
