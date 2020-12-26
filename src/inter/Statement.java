@@ -398,10 +398,24 @@ public class Statement implements AutoCloseable {
             public void query(Request request) {
 
                 String[] table = request.getFrom();
-                File file = new File(root + File.separator + table[0] + ".db");
+                for (Pack pack : packs) {
+                    if(table[0].equals(pack.getTable())){
+                        packs.remove(pack);
+                        return;
+                    }
+                }
+                File file = new File(root + File.separator + table[0] + ".dk");
                 if (file.exists()) {
                     file.delete();
+                    return;
                 }
+                else{
+                    file = new File(root + File.separator+table[0] + ".temp");
+                    if(file.exists()){
+                        file.delete();
+                    }
+                }
+
             }
         };
     };
