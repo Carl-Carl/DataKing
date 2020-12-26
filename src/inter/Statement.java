@@ -209,6 +209,22 @@ public class Statement implements AutoCloseable {
             public void query(Request request) {
 
                 String[] table = request.getFrom();
+                String[] order_by = request.getOrder();
+                boolean sort = order_by != null;
+                boolean legal_sort = false;
+                boolean ascend;
+                String key = null;
+                if(order_by != null){
+                    if(order_by.length != 2) return;
+                    if(order_by[0].equals("asc")){
+                        ascend = true;
+                    }
+                    else if(order_by[0].equals("desc")){
+                        ascend = false;
+                    }
+                    else return;
+                    key = order_by[1];
+                }
                 Pack pack = null;
                 pack = getPack(table[0]);
                 if (pack == null) {
@@ -221,6 +237,17 @@ public class Statement implements AutoCloseable {
                 ArrayList<Integer> chosen = new ArrayList<Integer>();
                 ArrayList<String> names_ = new ArrayList<String>();
                 var a = pack.getHeads();
+                if(order_by != null){
+                    for (Head head : a) {
+                        if(key.equals(head.getName())){
+                            legal_sort = true;
+                            break;;
+                        }
+                    }
+                    if(!legal_sort){
+                        return;
+                    }
+                }
                 int i, j;
                 for (i = 0, j = 0; i < a.length && j < size; i++){
                     if(names[0].equals("*")){
@@ -252,7 +279,10 @@ public class Statement implements AutoCloseable {
                             temp.clear();
                         }
                     }
-                    resultSet = new ResultSet(result);
+                    if(!sort) resultSet = ResultSet(pack);
+                    else {
+                        resultSet = ResultSet(pack, ascend, key);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
