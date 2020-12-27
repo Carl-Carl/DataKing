@@ -1,7 +1,7 @@
 /*
 * @Author: your name
 * @Date: 2020-12-25 14:51:55
- * @LastEditTime: 2020-12-27 09:45:36
+ * @LastEditTime: 2020-12-27 10:18:44
  * @LastEditors: Please set LastEditors
 * @Description: In User Settings Edit
 * @FilePath: \DataKing\src\tools\Console.java
@@ -28,7 +28,7 @@ public class Console {
                 System.out.println("Please input SQL orders.");
                 System.out.println("Input \"exit\" to close.\n");
 
-            System.out.print("Data King >> ");
+            System.out.print("\nData King >> ");
             while (sc.hasNext()) {
                 Statement st = con.getStatement();
                 String sql = sc.nextLine().trim();
