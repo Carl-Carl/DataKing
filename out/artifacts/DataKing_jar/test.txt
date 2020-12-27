@@ -18,3 +18,7 @@ update students set (score = 60) where score > 50;
 select * from students;
 
 drop students;
+
+insert into abc values (3);
+select * from ac, abc;
+select * from ac;

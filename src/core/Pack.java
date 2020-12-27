@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-16 14:00:09
- * @LastEditTime: 2020-12-26 16:55:24
+ * @LastEditTime: 2020-12-27 09:49:33
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\sql\pack.java
@@ -10,7 +10,6 @@ package core;
 
 import java.util.*;
 import com.google.gson.annotations.Expose;
-import sql.*;
 
 public class Pack  {
     
@@ -121,37 +120,6 @@ public class Pack  {
         Arrays.sort(temp, (Object a, Object b)->
             { return ((Head)a).getId() < ((Head)b).getId() ? -1 : 1;});
         return temp;
-    }
-
-    public static void main(String[] args) {
-        
-        Class<?>[] a = new Class[3];
-        a[0] = Integer.class;
-        a[1] = Double.class;
-        a[2] = Integer.class;
-
-        Object obj = 15;
-        System.out.println(obj.getClass());
-        if (obj.getClass().cast(obj) == Integer.class) {
-            Integer in = Integer.class.cast(obj);
-        }
-
-        try {
-            Pack pk = new Pack("rt", "123", new String[]{"1", "2", "3"}, a);
-            pk.add(new Object[]{"1", "2.0", "3"});
-            pk.add(new Object[]{"14", "5.0", "6"});
-            pk.add(new Object[]{"3", "7.0", "6"});
-            pk.add(new Object[]{"2", "7.0", "6"});
-            pk.add(new Object[]{"5", "7.0", "6"});
-            
-            ResultSet res = new ResultSet(pk, false, "1");
-            while (res.next()) {
-                System.out.println(res.getInt("1").toString());
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        
     }
 
     public String getTable() {

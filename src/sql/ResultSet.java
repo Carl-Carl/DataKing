@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-18 10:46:45
- * @LastEditTime: 2020-12-26 16:53:58
+ * @LastEditTime: 2020-12-27 09:47:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\core\sql\ResultSet.java
@@ -22,13 +22,11 @@ public class ResultSet {
     private Object[] current;
     private final Pack parent;
     private final int sortKey;
-    private final Class<?> kindKey;
 
     public ResultSet(Pack pack, boolean ascend, String key) {
         parent = pack;
         heads = pack.getHead();
         sortKey = pack.getHead().get(key).getId();
-        kindKey = pack.getHead().get(key).getKind();
         items.addAll(pack.getAll());
         // var h = pack.getHeads();
         // for (Head head : h) {
@@ -53,7 +51,6 @@ public class ResultSet {
         heads = pack.getHead();
         parent = pack;
         sortKey = -1;
-        kindKey = null;
         items.addAll(pack.getAll());
         pointer = items.iterator();
     }

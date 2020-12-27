@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-11 17:10:11
- * @LastEditTime: 2020-12-27 09:43:26
+ * @LastEditTime: 2020-12-27 10:07:23
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Statement.java
@@ -95,7 +95,7 @@ public class Statement implements AutoCloseable {
             else if(request.getType().equals(Request.Type.DROP)) handler.Handle(request);
             else if(request.getType().equals(Request.Type.UPDATE)) handler.Handle(request);
             else if(request.getType().equals(Request.Type.CREATE)) handler.Handle(request);
-            // else System.out.println("Can't resolve \"" + sql +"\" in this query!");
+            else return false;
         }
         return true;
     }
@@ -267,24 +267,25 @@ public class Statement implements AutoCloseable {
                         return;
                     }
                 }
-                int i, j;
-                for (i = 0, j = 0; i < a.length && j < size; i++){
-                    if(names[0].equals("*")){
-                        col.add(a[i].getKind());
-                        chosen.add(a[i].getId());
-                        names_.add(a[i].getName());
-                    }
-                    else if(names[j].equals(a[i].getName())){
-                        col.add(a[i].getKind());
-                        chosen.add(a[i].getId());
-                        names_.add(a[i].getName());
-                        j++;
-                    }
-                }
-                int len = chosen.size();
+                
                 try {
                     if (table.length > 1) {
-                        ResultSet[] multiResultSet = new ResultSet[table.length];
+                        int i, j;
+                        for (i = 0, j = 0; i < a.length && j < size; i++){
+                            if(names[0].equals("*")){
+                                col.add(a[i].getKind());
+                                chosen.add(a[i].getId());
+                                names_.add(a[i].getName());
+                            }
+                            else if(names[j].equals(a[i].getName())){
+                                col.add(a[i].getKind());
+                                chosen.add(a[i].getId());
+                                names_.add(a[i].getName());
+                                j++;
+                            }
+                        }
+                        int len = chosen.size();
+                        multiResultSet = new ResultSet[table.length];
                         for (i = 0; i < table.length; i++) {
                             Pack result = new Pack(root, table[i], (String[])names_.toArray(new String[len]), (Class<?>[])col.toArray(new Class<?>[len]));
                             var items = pack.getAll();
@@ -308,6 +309,21 @@ public class Statement implements AutoCloseable {
                                 multiResultSet[i] = new ResultSet(result, ascend, key);
                         }
                     } else {
+                        int i, j;
+                        for (i = 0, j = 0; i < a.length && j < size; i++){
+                            if(names[0].equals("*")){
+                                col.add(a[i].getKind());
+                                chosen.add(a[i].getId());
+                                names_.add(a[i].getName());
+                            }
+                            else if(names[j].equals(a[i].getName())){
+                                col.add(a[i].getKind());
+                                chosen.add(a[i].getId());
+                                names_.add(a[i].getName());
+                                j++;
+                            }
+                        }
+                        int len = chosen.size();
                         Pack result = new Pack(root, table[0], (String[])names_.toArray(new String[len]), (Class<?>[])col.toArray(new Class<?>[len]));
                         var items = pack.getAll();
                         ArrayList<Object> temp = new ArrayList<Object>();
@@ -474,7 +490,6 @@ public class Statement implements AutoCloseable {
                     Collection<Object[]> items = null;
                     items = pack.getAll();
                     var a = pack.getHeads();
-                    ArrayList<Object> temp = new ArrayList<Object>();
                     Object[] key_value = check_where(request.getWhere(), pack.getHeads());
                     var class_type = key_value == null ? null : a[(int)key_value[0]].getKind();
                     items.removeIf(objects -> satisfy_where(key_value, objects, class_type));
