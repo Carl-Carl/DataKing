@@ -25,7 +25,6 @@ public class Statement implements AutoCloseable {
     private final Connection connection;
     private String root;
     ArrayList<Pack> packs;
-    private ResultSet resultSet;
     private ResultSet[] multiResultSet;
 
 
@@ -54,7 +53,7 @@ public class Statement implements AutoCloseable {
             if(request.getType().equals(Request.Type.SELECT)) handler.Handle(request);
             // else System.out.println("Can't resolve \"" + sql +"\" in this query!\n");
         }
-        return resultSet;
+        return multiResultSet[0];
     }
 
     /**
@@ -227,6 +226,7 @@ public class Statement implements AutoCloseable {
             @Override
             public void query(Request request) {
 
+                int Length = 0;
                 String[] table = request.getFrom();
                 String[] order_by = request.getOrder();
                 boolean sort = order_by != null;
@@ -245,31 +245,30 @@ public class Statement implements AutoCloseable {
                     key = order_by[1];
                 }
                 Pack pack = null;
-                pack = getPack(table[0]);
-                if (pack == null) {
-                    System.out.println("No table found!");
-                    return;
-                }
-                String[] names = request.getSet();
-                int size = names.length;
-                ArrayList<Class<?>> col = new ArrayList<Class<?>>();
-                ArrayList<Integer> chosen = new ArrayList<Integer>();
-                ArrayList<String> names_ = new ArrayList<String>();
-                var a = pack.getHeads();
-                if(order_by != null){
-                    for (Head head : a) {
-                        if(key.equals(head.getName())){
-                            legal_sort = true;
-                            break;
+                for (String s : table) {
+                    pack = getPack(s);
+                    if (pack == null) {
+                        System.out.println("No table found!");
+                        break;
+                    }
+                    String[] names = request.getSet();
+                    int size = names.length;
+                    ArrayList<Class<?>> col = new ArrayList<Class<?>>();
+                    ArrayList<Integer> chosen = new ArrayList<Integer>();
+                    ArrayList<String> names_ = new ArrayList<String>();
+                    var a = pack.getHeads();
+                    if(order_by != null){
+                        for (Head head : a) {
+                            if(key.equals(head.getName())){
+                                legal_sort = true;
+                                break;
+                            }
+                        }
+                        if(!legal_sort){
+                            return;
                         }
                     }
-                    if(!legal_sort){
-                        return;
-                    }
-                }
-                
-                try {
-                    if (table.length > 1) {
+                    try{
                         int i, j;
                         for (i = 0, j = 0; i < a.length && j < size; i++){
                             if(names[0].equals("*")){
@@ -285,46 +284,7 @@ public class Statement implements AutoCloseable {
                             }
                         }
                         int len = chosen.size();
-                        multiResultSet = new ResultSet[table.length];
-                        for (i = 0; i < table.length; i++) {
-                            Pack result = new Pack(root, table[i], (String[])names_.toArray(new String[len]), (Class<?>[])col.toArray(new Class<?>[len]));
-                            var items = pack.getAll();
-                            ArrayList<Object> temp = new ArrayList<Object>();
-                            Object[] key_value = check_where(request.getWhere(), pack.getHeads());
-                            var class_type = key_value == null ? null : a[(int)key_value[0]].getKind();
-                            for (Object[] item : items) {
-                                if(satisfy_where(key_value, item, class_type)){
-                                    for (Integer integer : chosen) {
-                                        temp.add(item[integer]);
-                                    }
-                                    Object[] element = (Object[])temp.toArray(new Object[size]);
-                                    result.add(element);
-                                    temp.clear();
-                                } 
-                            }
-                            
-                            if(!sort)
-                                multiResultSet[i] = new ResultSet(result);
-                            else
-                                multiResultSet[i] = new ResultSet(result, ascend, key);
-                        }
-                    } else {
-                        int i, j;
-                        for (i = 0, j = 0; i < a.length && j < size; i++){
-                            if(names[0].equals("*")){
-                                col.add(a[i].getKind());
-                                chosen.add(a[i].getId());
-                                names_.add(a[i].getName());
-                            }
-                            else if(names[j].equals(a[i].getName())){
-                                col.add(a[i].getKind());
-                                chosen.add(a[i].getId());
-                                names_.add(a[i].getName());
-                                j++;
-                            }
-                        }
-                        int len = chosen.size();
-                        Pack result = new Pack(root, table[0], (String[])names_.toArray(new String[len]), (Class<?>[])col.toArray(new Class<?>[len]));
+                        Pack result = new Pack(root, s, (String[])names_.toArray(new String[len]), (Class<?>[])col.toArray(new Class<?>[len]));
                         var items = pack.getAll();
                         ArrayList<Object> temp = new ArrayList<Object>();
                         Object[] key_value = check_where(request.getWhere(), pack.getHeads());
@@ -337,16 +297,16 @@ public class Statement implements AutoCloseable {
                                 Object[] element = (Object[])temp.toArray(new Object[size]);
                                 result.add(element);
                                 temp.clear();
-                            } 
+                            }
                         }
-                        
                         if(!sort)
-                            resultSet = new ResultSet(result);
+                            multiResultSet[Length++] = new ResultSet(result);
                         else
-                            resultSet = new ResultSet(result, ascend, key);
+                            multiResultSet[Length++] = new ResultSet(result, ascend, key);
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         };
