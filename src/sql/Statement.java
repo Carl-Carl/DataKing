@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-11 17:10:11
- * @LastEditTime: 2020-12-26 19:12:38
+ * @LastEditTime: 2020-12-27 09:43:26
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Statement.java
@@ -23,9 +23,11 @@ public class Statement implements AutoCloseable {
 
     private boolean active = true;
     private final Connection connection;
-    String root;
+    private String root;
     ArrayList<Pack> packs;
-    public ResultSet resultSet;
+    private ResultSet resultSet;
+    private ResultSet[] multiResultSet;
+
 
     Statement (Connection connection, String root, Collection<Pack> packs) {
         this.connection = connection;
@@ -53,6 +55,26 @@ public class Statement implements AutoCloseable {
             // else System.out.println("Can't resolve \"" + sql +"\" in this query!\n");
         }
         return resultSet;
+    }
+
+    /**
+     * Execute sql sentences which query several tables the database
+     *
+     * @param sql
+     * @return The result
+     */
+    public ResultSet[] executeMultiQuery(String sql){
+        if (!active)
+            return null;
+        Request[] requests = Parser.parse(sql);
+        if(requests == null || requests[0].getFrom().length < 2)
+            return null;
+        SQLHandler handler = new SQLHandler();
+        for (Request request : requests) {
+            if(request.getType().equals(Request.Type.SELECT)) handler.Handle(request);
+            // else System.out.println("Can't resolve \"" + sql +"\" in this query!\n");
+        }
+        return multiResultSet;
     }
 
     /**
@@ -261,24 +283,51 @@ public class Statement implements AutoCloseable {
                 }
                 int len = chosen.size();
                 try {
-                    Pack result = new Pack(root, table[0], (String[])names_.toArray(new String[len]), (Class<?>[])col.toArray(new Class<?>[len]));
-                    var items = pack.getAll();
-                    ArrayList<Object> temp = new ArrayList<Object>();
-                    Object[] key_value = check_where(request.getWhere(), pack.getHeads());
-                    var class_type = key_value == null ? null : a[(int)key_value[0]].getKind();
-                    for (Object[] item : items) {
-                        if(satisfy_where(key_value, item, class_type)){
-                            for (Integer integer : chosen) {
-                                temp.add(item[integer]);
+                    if (table.length > 1) {
+                        ResultSet[] multiResultSet = new ResultSet[table.length];
+                        for (i = 0; i < table.length; i++) {
+                            Pack result = new Pack(root, table[i], (String[])names_.toArray(new String[len]), (Class<?>[])col.toArray(new Class<?>[len]));
+                            var items = pack.getAll();
+                            ArrayList<Object> temp = new ArrayList<Object>();
+                            Object[] key_value = check_where(request.getWhere(), pack.getHeads());
+                            var class_type = key_value == null ? null : a[(int)key_value[0]].getKind();
+                            for (Object[] item : items) {
+                                if(satisfy_where(key_value, item, class_type)){
+                                    for (Integer integer : chosen) {
+                                        temp.add(item[integer]);
+                                    }
+                                    Object[] element = (Object[])temp.toArray(new Object[size]);
+                                    result.add(element);
+                                    temp.clear();
+                                } 
                             }
-                            Object[] element = (Object[])temp.toArray(new Object[size]);
-                            result.add(element);
-                            temp.clear();
-                        } 
-                    }
-                    if(!sort) resultSet = new ResultSet(result);
-                    else {
-                        resultSet = new ResultSet(result, ascend, key);
+                            
+                            if(!sort)
+                                multiResultSet[i] = new ResultSet(result);
+                            else
+                                multiResultSet[i] = new ResultSet(result, ascend, key);
+                        }
+                    } else {
+                        Pack result = new Pack(root, table[0], (String[])names_.toArray(new String[len]), (Class<?>[])col.toArray(new Class<?>[len]));
+                        var items = pack.getAll();
+                        ArrayList<Object> temp = new ArrayList<Object>();
+                        Object[] key_value = check_where(request.getWhere(), pack.getHeads());
+                        var class_type = key_value == null ? null : a[(int)key_value[0]].getKind();
+                        for (Object[] item : items) {
+                            if(satisfy_where(key_value, item, class_type)){
+                                for (Integer integer : chosen) {
+                                    temp.add(item[integer]);
+                                }
+                                Object[] element = (Object[])temp.toArray(new Object[size]);
+                                result.add(element);
+                                temp.clear();
+                            } 
+                        }
+                        
+                        if(!sort)
+                            resultSet = new ResultSet(result);
+                        else
+                            resultSet = new ResultSet(result, ascend, key);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

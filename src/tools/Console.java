@@ -1,7 +1,7 @@
 /*
 * @Author: your name
 * @Date: 2020-12-25 14:51:55
- * @LastEditTime: 2020-12-26 23:34:07
+ * @LastEditTime: 2020-12-27 09:45:36
  * @LastEditors: Please set LastEditors
 * @Description: In User Settings Edit
 * @FilePath: \DataKing\src\tools\Console.java
@@ -37,13 +37,20 @@ public class Console {
                     return;
                 }
                 
-                var res = st.executeQuery(sql);
-                if (res != null)
-                    res.print();
-                else if (st.executeUpdate(sql))
-                    System.out.println("Execute successfully.");
-                else
-                    System.out.println("Invalid input.");
+                var res1 = st.executeQuery(sql);
+                if (res1 != null)
+                    res1.print();
+                else {
+                    var res2 = st.executeMultiQuery(sql);
+                    if (res2 != null)
+                        for (var r : res2)
+                            r.print();
+                    else if (st.executeUpdate(sql))
+                        System.out.println("Execute successfully.");
+                    else
+                        System.out.println("Invalid input.");
+                }
+                
                 st.close();
                 con.commit();
                 System.out.print("Data King >> ");
