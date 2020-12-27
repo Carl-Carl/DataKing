@@ -1,0 +1,6 @@
+["name","score","age","address","height"]
+["Str","Int","Int","Str","Dbl"]
+["Mike",98,17,"Beijing",168.5]
+["Winter",99,17,"Wuhan",165.6]
+["Linda",97,17,"Shanghai",153.4]
+["Louis",100,16,"Chengdu",172.9]

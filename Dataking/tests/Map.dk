@@ -1,0 +1,6 @@
+["City","temperature","square","population"]
+["Str","Dbl","Int","Int"]
+["Beijing",32.5,10102,876]
+["Shanghai",26.9,6789,890]
+["Chengdu",29.3,9509,1232]
+["Wuhan",33.0,12563,1345]
