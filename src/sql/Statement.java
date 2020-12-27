@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-12-11 17:10:11
- * @LastEditTime: 2020-12-27 10:07:23
+ * @LastEditTime: 2020-12-27 10:34:43
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \DataKing\src\inter\Statement.java
@@ -47,7 +47,8 @@ public class Statement implements AutoCloseable {
         if (!active)
             return null;
         Request[] requests = Parser.parse(sql);
-        if(requests == null) return null;
+        if(requests == null || requests[0].getFrom().length > 1)
+            return null;
         SQLHandler handler = new SQLHandler();
         for (Request request : requests) {
             if(request.getType().equals(Request.Type.SELECT)) handler.Handle(request);
@@ -229,6 +230,7 @@ public class Statement implements AutoCloseable {
                 int Length = 0;
                 String[] table = request.getFrom();
                 String[] order_by = request.getOrder();
+                multiResultSet = new ResultSet[table.length];
                 boolean sort = order_by != null;
                 boolean legal_sort = false;
                 boolean ascend = true;

@@ -1,7 +1,7 @@
 /*
 * @Author: your name
 * @Date: 2020-12-25 14:51:55
- * @LastEditTime: 2020-12-27 10:18:44
+ * @LastEditTime: 2020-12-27 10:35:04
  * @LastEditors: Please set LastEditors
 * @Description: In User Settings Edit
 * @FilePath: \DataKing\src\tools\Console.java
@@ -53,7 +53,7 @@ public class Console {
                 
                 st.close();
                 con.commit();
-                System.out.print("Data King >> ");
+                System.out.print("\nData King >> ");
             }
             
         }
